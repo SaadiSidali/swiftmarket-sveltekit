@@ -1,0 +1,21 @@
+import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+import type { Handle } from '@sveltejs/kit';
+import PocketBase from 'pocketbase';
+
+import { sequence } from '@sveltejs/kit/hooks';
+
+const pb = new PocketBase(PUBLIC_POCKETBASE_URL);
+const firstHandle: Handle = async ({ event, resolve }) => {
+	event.locals.pb = pb;
+	const response = await resolve(event);
+
+	return response;
+};
+
+const secondHandle: Handle = async ({ event, resolve }) => {
+	const response = await resolve(event);
+	console.log('response status:', response);
+	return response;
+};
+
+export const handle = sequence(firstHandle, secondHandle);
