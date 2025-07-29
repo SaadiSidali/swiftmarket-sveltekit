@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Carousel from '$lib/components/Carousel.svelte';
+	// import Carousel from '$lib/components/Carousel.svelte';
 	import ProductItem from '$lib/components/ProductItem.svelte';
 	import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
 
@@ -17,18 +17,18 @@
 </svelte:head>
 
 {#if banners.length !== 0}
-	<Carousel {banners} />
+	<!-- <Carousel {banners} /> -->
 {/if}
 
 <div class="mx-3 md:mx-10">
-	<section class="text-gray-800 text-center lg:text-left lg:px-32 lg:py-5">
-		<div class="grid lg:grid-cols-2 gap-6 xl:gap-12 justify-center">
+	<section class="text-center text-gray-800 lg:px-32 lg:py-5 lg:text-left">
+		<div class="grid justify-center gap-6 lg:grid-cols-2 xl:gap-12">
 			<div class="mb-6 lg:mb-0">
-				<h1 class="text-5xl md:text-6xl xl:text-7xl font-bold tracking-tight">This is your shop</h1>
+				<h1 class="text-5xl font-bold tracking-tight md:text-6xl xl:text-7xl">This is your shop</h1>
 				<p class="mt-4 text-lg lg:pl-3">Talk about your business, your products, or yourself</p>
 			</div>
-			<div class="mb-6 lg:mb-0 flex flex-col justify-center">
-				<p class="text-gray-500 text-lg">
+			<div class="mb-6 flex flex-col justify-center lg:mb-0">
+				<p class="text-lg text-gray-500">
 					Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex eum iste repudiandae nisi modi
 					placeat velit repellendus, tempore voluptates facere maiores praesentium harum deleniti
 					voluptatibus laudantium quasi quos recusandae soluta ullam maxime quaerat debitis beatae
@@ -40,9 +40,9 @@
 	</section>
 
 	{#each showcase as showsection}
-		<h2 class="text-center font-extrabold text-6xl pt-20 pb-12 uppercase">{showsection.name}</h2>
+		<h2 class="pt-20 pb-12 text-center text-6xl font-extrabold uppercase">{showsection.name}</h2>
 
-		<div class="grid gap-12 grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-2 gap-12 lg:grid-cols-4">
 			{#each showsection.expand.products as product (product.id)}
 				<ProductItem
 					title={product.name}

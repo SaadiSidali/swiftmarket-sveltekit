@@ -1,14 +1,7 @@
+import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
-import type { UserConfig } from 'vite';
+import { defineConfig } from 'vite';
 
-const config: UserConfig = {
-	plugins: [sveltekit()],
-	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
-	},
-	optimizeDeps: {
-		include: ['svelte-carousel']
-	}
-};
-
-export default config;
+export default defineConfig({
+	plugins: [tailwindcss(), sveltekit()]
+});

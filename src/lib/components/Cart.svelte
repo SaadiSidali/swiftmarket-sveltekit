@@ -1,28 +1,21 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
-	import { clickoutside } from '@svelte-put/clickoutside';
 	import { onDestroy } from 'svelte';
 	import { cartItemsStore, removeFromCart, type CartItem } from '$lib/stores';
 	import QuantityInput from '$lib/components/QuantityInput.svelte';
 	import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
-	import { onMount } from 'svelte';
-	import { loadStripe } from '@stripe/stripe-js/pure';
-	import { PUBLIC_STRIPE_KEY } from '$env/static/public';
-
-	let stripe: any = null;
 
 	interface Props {
-		cartOpened: boolean;
+		cartOpened?: boolean;
 	}
 
-	let { cartOpened = $bindable() }: Props = $props();
-	let backgroundNode: HTMLElement = $state();
+	let { cartOpened = $bindable(false) }: Props = $props();
+	let backgroundNode: HTMLElement | undefined = $state();
 
-	let cartItemsValue: CartItem[] = $state();
-	let checkoutPrice: number = $state();
+	let cartItemsValue: CartItem[] = $state([]);
+	let checkoutPrice: number = $state(0);
 
-	run(() => {
+	// Calculate checkout price whenever cart items change
+	$effect(() => {
 		let value = 0;
 		for (const item of cartItemsValue) {
 			if (item.salePrice === 0) {
@@ -49,27 +42,21 @@
 
 		if (res !== null) {
 			const response = await res.json();
-
-			await stripe?.redirectToCheckout({
-				sessionId: response.stripeSession.id
-			});
+			// Redirect to checkout page or handle in another way
+			window.location.href = response.url || '/checkout';
 		}
 	}
 
-	onMount(async () => {
-		stripe = await loadStripe(PUBLIC_STRIPE_KEY);
-	});
+	function closeCart() {
+		cartOpened = false;
+	}
 
 	onDestroy(unsubscribe);
 </script>
 
-<div
-	class="fixed w-full max-w-lg right-0 inset-y-0 flex flex-col bg-white z-20"
-	use:clickoutside={{ limit: { parent: backgroundNode } }}
-	onclickoutside={() => (cartOpened = false)}
->
-	<div class="flex items-center justify-between mx-5 py-4">
-		<h1 class="uppercase font-bold text-xl">
+<div class="fixed inset-y-0 right-0 z-20 flex w-full max-w-lg flex-col bg-white">
+	<div class="mx-5 flex items-center justify-between py-4">
+		<h1 class="text-xl font-bold uppercase">
 			{cartItemsValue.length}
 			{cartItemsValue.length === 1 ? 'item' : 'items'}
 		</h1>
@@ -81,7 +68,7 @@
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="w-6 h-6"
+				class="h-6 w-6"
 			>
 				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 			</svg>
@@ -93,7 +80,7 @@
 	{#if cartItemsValue.length !== 0}
 		<div class="flex-col overflow-y-auto">
 			{#each $cartItemsStore as cartItem}
-				<div class="flex mx-5 mb-5 gap-5">
+				<div class="mx-5 mb-5 flex gap-5">
 					<img
 						src="{PUBLIC_POCKETBASE_URL}/api/files/products/{cartItem.id}/{cartItem.thumbnail}"
 						width="92"
@@ -103,7 +90,7 @@
 
 					<div>
 						<a href="/products/{cartItem.slug}" target="_self">{cartItem.name}</a>
-						<div class="flex gap-3 my-2">
+						<div class="my-2 flex gap-3">
 							<QuantityInput bind:count={cartItem.quantity} mini={true} />
 							<button
 								onclick={() => removeFromCart(cartItem.slug)}
@@ -114,7 +101,7 @@
 						</div>
 					</div>
 
-					<div class="flex flex-col grow">
+					<div class="flex grow flex-col">
 						{#if cartItem.salePrice === 0}
 							<p class="text-right">${Number(cartItem.price * cartItem.quantity).toFixed(2)}</p>
 						{:else}
@@ -130,21 +117,21 @@
 			{/each}
 		</div>
 
-		<div class="px-10 py-10 grow flex items-end">
+		<div class="flex grow items-end px-10 py-10">
 			<button
-				class="w-full h-12 text-black font-bold transition-colors duration-150 bg-yellow-300 focus:shadow hover:bg-yellow-500"
-				onclick={() => handlePayment()}
+				class="h-12 w-full bg-yellow-300 font-bold text-black transition-colors duration-150 hover:bg-yellow-500 focus:shadow"
+				onclick={handlePayment}
 			>
 				Checkout ${checkoutPrice}
 			</button>
 		</div>
 	{:else}
-		<div class="flex flex-col justify-center h-full">
+		<div class="flex h-full flex-col justify-center">
 			<p class="text-center">Your cart is empty</p>
 			<div class="px-10 py-10">
 				<a href="/shop/all" target="_self">
 					<button
-						class="w-full h-12 text-black font-bold transition-colors duration-150 bg-yellow-300 focus:shadow hover:bg-yellow-500"
+						class="h-12 w-full bg-yellow-300 font-bold text-black transition-colors duration-150 hover:bg-yellow-500 focus:shadow"
 					>
 						Start shopping
 					</button>
@@ -154,4 +141,8 @@
 	{/if}
 </div>
 
-<div bind:this={backgroundNode} class="fixed inset-0 bg-black opacity-40 z-[15]"></div>
+<div
+	bind:this={backgroundNode}
+	class="fixed inset-0 z-[15] bg-black opacity-40"
+	onclick={closeCart}
+></div>

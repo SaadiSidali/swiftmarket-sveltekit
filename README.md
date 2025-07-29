@@ -1,67 +1,38 @@
-# SwiftMarket
+# sv
 
-E-Commerce solution built with SvelteKit, Pocketbase as a database and Stripe for payments, providing better performance and faster development time.
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-You can try a demo at https://swiftmarket.vercel.app/
+## Creating a project
 
-## Getting Started
+If you're seeing this, you've probably already done this step. Congrats!
 
-### Clone the repo
+```sh
+# create a new project in the current directory
+npx sv create
 
-```bash
-git clone https://github.com/SwiftMarket/swiftmarket-sveltekit.git
-cd swiftmarket-sveltekit
+# create a new project in my-app
+npx sv create my-app
 ```
 
-### Setting up SvelteKit
-Install dependencies
+## Developing
 
-```bash
-pnpm install
-```
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-Create .env file
+```sh
+npm run dev
 
-```bash
-cp .env.example .env
-```
-
-Change the variables, if you haven't modified the Pocketbase database, the URL should be the same. `PUBLIC_STRIPE_KEY` and `SECRET_STRIPE_KEY` can be found from your Stripe dashboard.
-
-### Setting up Pocketbase
-
-Download the [Pocketbase](https://pocketbase.io/docs/) file and serve it with
-
-```bash
-./pocketbase serve
-```
-
-Open the Admin UI and create an admin account.
-
-Download _[pb_schema.json](https://github.com/SwiftMarket/pocketbase_collections/blob/main/pb_schema.json)_
-
-Go to **Settings/Import collections** and click **Load from JSON file** and select _pb_schema.json_
-
-### Developing
-
-After you serve Pocketbase, you can safely launch the SvelteKit project with:
-
-```bash
-pnpm run dev
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
 ## Building
 
 To create a production version of your app:
 
-```bash
-pnpm run build
+```sh
+npm run build
 ```
 
-You can preview the production build with `pnpm run preview`.
+You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Next steps
-
-For more information, please visit our documentation.
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
