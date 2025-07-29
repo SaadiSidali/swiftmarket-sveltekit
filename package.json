@@ -54,6 +54,8 @@
 		]
 	},
 	"dependencies": {
+		"@sveltejs/adapter-node": "^5.2.13",
+		"dotenv": "^17.2.1",
 		"pocketbase": "^0.26.2",
 		"svelte-markdown": "^0.4.1"
 	}

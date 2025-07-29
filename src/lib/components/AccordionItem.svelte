@@ -11,7 +11,7 @@
 	const collapseId = 'id' + Math.random().toString(16).slice(2);
 
 	onMount(async () => {
-		await import('tw-elements');
+		
 	});
 </script>
 
