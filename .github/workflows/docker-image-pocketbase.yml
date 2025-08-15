@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: PocketBase Docker Image CI
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-pb
 
 permissions:
   contents: read
@@ -21,13 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Lowercase image name
-        run: |
-          # split GITHUB_REPOSITORY (owner/repo) then lowercase both parts
-          OWNER=$(echo "${GITHUB_REPOSITORY}" | cut -d/ -f1)
-          REPO_LOWER=$(echo "${GITHUB_REPOSITORY}" | cut -d/ -f2 | tr '[:upper:]' '[:lower:]')
-          echo "IMAGE_REF=${REGISTRY}/${OWNER}/${REPO_LOWER}" >> $GITHUB_ENV
-
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -35,14 +29,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and tag PocketBase image
-        run: |
-          TAG=${GITHUB_SHA::7}
-          docker build \
-            -f Dockerfile-pb \
-            -t $IMAGE_REF:$TAG \
-            .
-
-      - name: Push the Docker image
-        run: |
-          docker push $IMAGE_REF:$TAG
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      # This step uses the `docker/build-push-action` action to build the image, based on your repository's `Dockerfile`. If the build succeeds, it pushes the image to GitHub Packages.
+      # It uses the `context` parameter to define the build's context as the set of files located in the specified path. For more information, see "[Usage](https://github.com/docker/build-push-action#usage)" in the README of the `docker/build-push-action` repository.
+      # It uses the `tags` and `labels` parameters to tag and label the image with the output from the "meta" step.
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: ./Dockerfile-pb
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
