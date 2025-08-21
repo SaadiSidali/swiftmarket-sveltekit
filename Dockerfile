@@ -1,29 +1,42 @@
 # Build stage
 FROM node:24.1-alpine3.20 AS builder
 
-
+# Install pnpm
 RUN npm install -g pnpm
 
-# Install dependencies
-COPY package*.json ./
-RUN npm ci
-# Copy source files and build the app
+WORKDIR /app
+
+# Copy package manifests and install dependencies with pnpm
+COPY package.json package-lock.json* pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+# Copy source and build
 COPY . .
-RUN npm run build:prod
+RUN pnpm run build
 
-# Prune dev dependencies
-RUN npm prune --omit=dev
+# Stage 2: Production image
+FROM node:24.1-alpine3.20 AS prod
 
-# Runtime stage
-FROM node:24.1-alpine3.20
+WORKDIR /app
 
+# Install only production dependencies
+COPY package.json package-lock.json* pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --omit=dev
 
-# Set environment variables
-ENV NODE_ENV=production
-ENV PORT=3000
+# Copy built app
+COPY --from=builder /app/build ./build
 
-# Expose the application's port
+# If you're using .env files and Node >=20.6, uncomment:
+# COPY .env .env
+
+# Expose port (customize if not 3000)
 EXPOSE 3000
 
-# Start the application
+# Set environment variables or rely on Docker/Kubernetes configuration
+# Example:
+# ENV HOST=0.0.0.0
+# ENV PORT=3000
+# ENV ORIGIN=https://your.domain
+
+# Launch
 CMD ["node", "build"]

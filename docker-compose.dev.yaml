@@ -1,0 +1,53 @@
+services:
+  traefik:
+    image: traefik:v3.5
+    command:
+      - '--providers.docker'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - '--api.insecure=true'
+    ports:
+      - '80:80'
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app-network
+
+  store:
+    build:
+      context: .
+    container_name: store
+    env_file: .env
+    volumes:
+      - ./store:/app
+      - /app/node_modules
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.store.rule=Host(`store.localhost`)'
+      - 'traefik.http.routers.store.entrypoints=web'
+    networks:
+      - app-network
+
+  pocketbase:
+    build:
+      context: .
+      dockerfile: Dockerfile-pb
+    container_name: pocketbase
+    volumes:
+      - ./pb_data:/pb/pb_data
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.pocketbase-api.rule=Host(`api.localhost`)'
+      - 'traefik.http.routers.pocketbase-api.entrypoints=web'
+      - 'traefik.http.services.pocketbase-api.loadbalancer.server.port=8080'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    name: app-network
+
+volumes:
+  letsencrypt:
