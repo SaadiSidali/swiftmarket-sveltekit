@@ -1,7 +1,7 @@
 <script lang="ts">
 	// import Carousel from '$lib/components/Carousel.svelte';
 	import ProductItem from '$lib/components/ProductItem.svelte';
-	import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+	import { POCKETBASEURL } from '$lib/utils';
 
 	interface Props {
 		data: any;
@@ -46,10 +46,10 @@
 			{#each showsection.expand.products as product (product.id)}
 				<ProductItem
 					title={product.name}
-					image="{PUBLIC_POCKETBASE_URL}/api/files/{product.collectionName}/{product.id}/{product
+					image="{POCKETBASEURL}/api/files/{product.collectionName}/{product.id}/{product
 						.gallery[0]}"
 					hoverImage={product.gallery.length > 1
-						? `${PUBLIC_POCKETBASE_URL}/api/files/${product.collectionName}/${product.id}/${product.gallery[1]}`
+						? `${POCKETBASEURL}/api/files/${product.collectionName}/${product.id}/${product.gallery[1]}`
 						: ''}
 					price={product.price}
 					salePrice={product.sale_price}

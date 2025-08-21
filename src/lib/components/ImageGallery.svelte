@@ -1,7 +1,6 @@
 <script lang="ts">
+	import { POCKETBASEURL } from '$lib/utils';
 	import { run } from 'svelte/legacy';
-
-	import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
 
 	interface Props {
 		productId: string;
@@ -35,18 +34,18 @@
 <div class="flex flex-col gap-5">
 	<img
 		class="w-full"
-		src="{PUBLIC_POCKETBASE_URL}/api/files/products/{productId}/{active_image}"
+		src="{POCKETBASEURL}/api/files/products/{productId}/{active_image}"
 		width="700"
 		height="700"
 		alt={alt_text}
 	/>
 
-	<div class="grid gap-3 grid-cols-2 lg:grid-cols-4">
+	<div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
 		{#each images as image}
 			<button onclick={() => setImage(image)}>
 				<img
 					class={generateStyle(image)}
-					src="{PUBLIC_POCKETBASE_URL}/api/files/products/{productId}/{image}"
+					src="{POCKETBASEURL}/api/files/products/{productId}/{image}"
 					width="700"
 					height="700"
 					alt={alt_text}

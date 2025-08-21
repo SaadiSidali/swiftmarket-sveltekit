@@ -2,7 +2,7 @@
 	import { onDestroy } from 'svelte';
 	import { cartItemsStore, removeFromCart, type CartItem } from '$lib/stores';
 	import QuantityInput from '$lib/components/QuantityInput.svelte';
-	import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+	import { POCKETBASEURL } from '$lib/utils';
 
 	interface Props {
 		cartOpened?: boolean;
@@ -82,7 +82,7 @@
 			{#each $cartItemsStore as cartItem}
 				<div class="mx-5 mb-5 flex gap-5">
 					<img
-						src="{PUBLIC_POCKETBASE_URL}/api/files/products/{cartItem.id}/{cartItem.thumbnail}"
+						src="{POCKETBASEURL}/api/files/products/{cartItem.id}/{cartItem.thumbnail}"
 						width="92"
 						height="92"
 						alt="{cartItem.name} thumbnail"

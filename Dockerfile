@@ -7,36 +7,29 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Copy package manifests and install dependencies with pnpm
-COPY package.json package-lock.json* pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json package-lock.json* ./
 
-# Copy source and build
-COPY . .
-RUN pnpm run build
+RUN pnpm install 
 
-# Stage 2: Production image
-FROM node:24.1-alpine3.20 AS prod
+COPY src ./src
+COPY static ./static
+COPY svelte.config.* ./
+COPY vite.config.* ./
+
+RUN pnpm build
+
+FROM node:24.1-alpine3.20 AS runner
 
 WORKDIR /app
 
-# Install only production dependencies
-COPY package.json package-lock.json* pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --omit=dev
+RUN npm install -g pnpm
 
-# Copy built app
 COPY --from=builder /app/build ./build
+COPY --from=builder /app/package.json .
+COPY --from=builder /app/pnpm-lock.yaml .
+RUN pnpm install --prod
 
-# If you're using .env files and Node >=20.6, uncomment:
-# COPY .env .env
 
-# Expose port (customize if not 3000)
 EXPOSE 3000
 
-# Set environment variables or rely on Docker/Kubernetes configuration
-# Example:
-# ENV HOST=0.0.0.0
-# ENV PORT=3000
-# ENV ORIGIN=https://your.domain
-
-# Launch
 CMD ["node", "build"]

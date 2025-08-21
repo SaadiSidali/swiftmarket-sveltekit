@@ -1,7 +1,8 @@
 <script lang="ts">
 	import ProductItem from '$lib/components/ProductItem.svelte';
-	import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+
 	import AccordionItem from '$lib/components/AccordionItem.svelte';
+	import { POCKETBASEURL } from '$lib/utils';
 
 	interface Props {
 		data: any;
@@ -15,21 +16,21 @@
 	<title>SwiftMarket Shop</title>
 </svelte:head>
 
-<div class="flex justify-center items-center gap-6 m-auto p-5 flex-wrap">
-	<a class="hover:underline underline-offset-4" href="/shop/all">All</a>
-	<a class="hover:underline underline-offset-4" href="/shop/iphone-cases">iPhone Cases</a>
-	<a class="hover:underline underline-offset-4" href="/shop/airpods-cases">AirPods Cases</a>
-	<a class="hover:underline underline-offset-4" href="/shop/sleeves">Sleeves</a>
-	<a class="hover:underline underline-offset-4" href="/shop/cables">Cables</a>
-	<a class="hover:underline underline-offset-4" href="/shop/chargers">Chargers</a>
-	<a class="hover:underline underline-offset-4" href="/shop/accessories">Accessories</a>
+<div class="m-auto flex flex-wrap items-center justify-center gap-6 p-5">
+	<a class="underline-offset-4 hover:underline" href="/shop/all">All</a>
+	<a class="underline-offset-4 hover:underline" href="/shop/iphone-cases">iPhone Cases</a>
+	<a class="underline-offset-4 hover:underline" href="/shop/airpods-cases">AirPods Cases</a>
+	<a class="underline-offset-4 hover:underline" href="/shop/sleeves">Sleeves</a>
+	<a class="underline-offset-4 hover:underline" href="/shop/cables">Cables</a>
+	<a class="underline-offset-4 hover:underline" href="/shop/chargers">Chargers</a>
+	<a class="underline-offset-4 hover:underline" href="/shop/accessories">Accessories</a>
 </div>
 
 <hr />
 
-<div class="flex flex-col py-8 px-3 lg:flex-row md:px-20">
-	<div class="mg-0 basis-1/6 flex flex-col pb-5 lg:mx-10">
-		<h1 class="uppercase font-bold text-xl pb-4">FILTERS</h1>
+<div class="flex flex-col px-3 py-8 md:px-20 lg:flex-row">
+	<div class="mg-0 flex basis-1/6 flex-col pb-5 lg:mx-10">
+		<h1 class="pb-4 text-xl font-bold uppercase">FILTERS</h1>
 		<hr />
 		<AccordionItem name="Price">
 			<p>TODO</p>
@@ -44,7 +45,7 @@
 		</AccordionItem>
 		<hr />
 	</div>
-	<div class="basis-5/6 flex flex-col">
+	<div class="flex basis-5/6 flex-col">
 		<div class="flex justify-between pb-4">
 			<p>{products.length} products</p>
 			<div>
@@ -57,10 +58,10 @@
 			{#each products as product}
 				<ProductItem
 					title={product.name}
-					image="{PUBLIC_POCKETBASE_URL}/api/files/{product.collectionName}/{product.id}/{product
+					image="{POCKETBASEURL}/api/files/{product.collectionName}/{product.id}/{product
 						.gallery[0]}"
 					hoverImage={product.gallery.length > 1
-						? `${PUBLIC_POCKETBASE_URL}/api/files/${product.collectionName}/${product.id}/${product.gallery[1]}`
+						? `${POCKETBASEURL}/api/files/${product.collectionName}/${product.id}/${product.gallery[1]}`
 						: ''}
 					price={product.price}
 					salePrice={product.sale_price}

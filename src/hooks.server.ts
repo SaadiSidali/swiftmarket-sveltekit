@@ -1,10 +1,11 @@
-import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import type { Handle } from '@sveltejs/kit';
 import PocketBase from 'pocketbase';
 
 import { sequence } from '@sveltejs/kit/hooks';
+import { POCKETBASEURL } from '$lib/utils';
 
-const pb = new PocketBase(PUBLIC_POCKETBASE_URL);
+const pb = new PocketBase(POCKETBASEURL);
 const firstHandle: Handle = async ({ event, resolve }) => {
 	event.locals.pb = pb;
 	const response = await resolve(event);
