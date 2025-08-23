@@ -21,6 +21,13 @@
 	let smsNotifications = $state(false);
 	let orderNotifications = $state(true);
 	let marketingEmails = $state(true);
+
+	function onclick(id: string) {
+		window.scrollTo({
+			top: document.getElementById(id)?.offsetTop,
+			behavior: 'smooth'
+		});
+	}
 </script>
 
 <div class="space-y-6">
@@ -38,34 +45,34 @@
 			<Card class="border-border bg-card">
 				<CardContent class="pt-6">
 					<nav class="space-y-2">
-						<a
-							href="#general"
-							class="flex items-center gap-3 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
+						<button
+							onclick={() => onclick('general')}
+							class="flex w-full items-center gap-3 rounded-lg bg-primary px-3 py-2 text-left text-sm font-medium text-primary-foreground"
 						>
 							<Globe class="h-4 w-4" />
 							General
-						</a>
-						<a
-							href="#notifications"
-							class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+						</button>
+						<button
+							onclick={() => onclick('notifications')}
+							class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-foreground hover:bg-muted"
 						>
 							<Bell class="h-4 w-4" />
 							Notifications
-						</a>
-						<a
-							href="#security"
-							class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+						</button>
+						<button
+							onclick={() => onclick('security')}
+							class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-foreground hover:bg-muted"
 						>
 							<Shield class="h-4 w-4" />
 							Security
-						</a>
-						<a
-							href="#billing"
-							class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+						</button>
+						<button
+							onclick={() => onclick('billing')}
+							class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-foreground hover:bg-muted"
 						>
 							<CreditCard class="h-4 w-4" />
 							Billing
-						</a>
+						</button>
 					</nav>
 				</CardContent>
 			</Card>
