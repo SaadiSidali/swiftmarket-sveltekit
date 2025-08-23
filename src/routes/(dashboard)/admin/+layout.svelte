@@ -7,8 +7,8 @@
 
 <Sidebar.Provider>
 	<AppSidebar />
-	<main>
-		<Sidebar.Trigger />
+	<Sidebar.Trigger />
+	<main class="container mx-auto p-4">
 		{@render children?.()}
 	</main>
 </Sidebar.Provider>

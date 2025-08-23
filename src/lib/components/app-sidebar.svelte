@@ -1,6 +1,6 @@
 <script lang="ts">
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
-	import { HouseIcon, InboxIcon, SearchIcon, SettingsIcon } from '@lucide/svelte';
+	import { HouseIcon, InboxIcon, SearchIcon, SettingsIcon, PackageIcon } from '@lucide/svelte';
 
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 
@@ -12,20 +12,16 @@
 			icon: HouseIcon
 		},
 		{
-			title: 'Inbox',
-			url: '/admin/inbox',
+			title: 'Orders',
+			url: '/admin/orders',
 			icon: InboxIcon
 		},
 		{
-			title: 'Calendar',
-			url: '/admin/calendar',
-			icon: CalendarIcon
+			title: 'Products',
+			url: '/admin/products',
+			icon: PackageIcon
 		},
-		{
-			title: 'Search',
-			url: '/admin/search',
-			icon: SearchIcon
-		},
+
 		{
 			title: 'Settings',
 			url: '/admin/settings',
