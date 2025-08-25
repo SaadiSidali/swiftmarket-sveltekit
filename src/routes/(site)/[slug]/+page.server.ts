@@ -13,8 +13,8 @@ export const load = (async ({ params, locals }) => {
 		return structuredClone(productRecord);
 	} catch (e) {
 		console.log(`Couldnt load page /shop/${params.slug}`);
-		error(500, {
-			message: 'Couldnt load this page'
+		error(404, {
+			message: 'Couldnt find this page'
 		});
 	}
 }) satisfies PageServerLoad;
