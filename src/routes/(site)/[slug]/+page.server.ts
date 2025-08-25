@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 export const load = (async ({ params, locals }) => {
 	try {
 		const productRecord = await locals.pb
-			.collection('products')
+			.collection<Product>('products')
 			.getFirstListItem(`slug="${params.slug}"`, {
 				expand: 'related_products'
 			});
