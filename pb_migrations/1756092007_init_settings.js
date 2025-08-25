@@ -6,6 +6,8 @@ migrate(
 
 		// for all available settings fields you could check
 		// /jsvm/interfaces/core.Settings.html
+		settings.s3.enabled = true;
+
 		settings.s3.endpoint = process.env.S3_ENDPOINT;
 		settings.s3.bucket = process.env.S3_BUCKET;
 		settings.s3.region = process.env.S3_REGION;
