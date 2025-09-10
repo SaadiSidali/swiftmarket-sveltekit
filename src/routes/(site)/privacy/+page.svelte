@@ -105,15 +105,4 @@
 </div>
 
 <style>
-	.prose h2 {
-		@apply border-b border-gray-200 pb-2 text-gray-900;
-	}
-
-	.prose p {
-		@apply leading-relaxed text-gray-700;
-	}
-
-	.prose ul li {
-		@apply mb-2 text-gray-700;
-	}
 </style>
