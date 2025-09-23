@@ -1,12 +1,11 @@
 <script>
-	import SvelteMarkdown from 'svelte-markdown';
+	import Markdown from 'svelte-exmarkdown';
 
-	/** @type {{source?: string}} */
 	let { source = '' } = $props();
 </script>
 
-<div class="flex flex-col space-y-4 pb-10 basis-2/3" id="markdown-container">
-	<SvelteMarkdown {source} />
+<div class="flex basis-2/3 flex-col space-y-4 pb-10" id="markdown-container">
+	<Markdown md={source} />
 </div>
 
 <style>
