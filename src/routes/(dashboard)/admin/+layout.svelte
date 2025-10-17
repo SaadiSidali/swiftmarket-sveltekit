@@ -17,6 +17,9 @@
 		}
 	}}
 />
+<svelte:head>
+	<title>Admin Dashboard</title>
+</svelte:head>
 
 <QueryClientProvider client={queryClient}>
 	<Sidebar.Provider>

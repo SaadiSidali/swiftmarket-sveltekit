@@ -33,10 +33,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Admin Dashboard</title>
-</svelte:head>
-
 <div class="space-y-6">
 	<!-- Welcome message -->
 	<div class="overflow-hidden rounded-lg bg-white shadow">

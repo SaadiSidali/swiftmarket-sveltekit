@@ -18,7 +18,7 @@
 	let filter = $state('');
 </script>
 
-<div class="space-y-6">
+<div class="container mx-auto space-y-6">
 	<!-- Page header -->
 	<div class="flex items-center justify-between">
 		<div>
