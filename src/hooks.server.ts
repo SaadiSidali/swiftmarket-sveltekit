@@ -44,7 +44,6 @@ const firstHandle: Handle = async ({ event, resolve }) => {
 
 const secondHandle: Handle = async ({ event, resolve }) => {
 	const response = await resolve(event);
-	console.log('response status:', response);
 	return response;
 };
 

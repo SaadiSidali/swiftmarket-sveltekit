@@ -58,6 +58,7 @@
 		"@tanstack/svelte-query": "^5.90.2",
 		"@tanstack/svelte-query-devtools": "^5.90.2",
 		"dotenv": "^17.2.3",
+		"pino": "^10.1.0",
 		"pocketbase": "^0.26.2",
 		"svelte-exmarkdown": "^5.0.2"
 	}

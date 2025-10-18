@@ -25,10 +25,12 @@
 			<h1 class="text-3xl font-bold text-foreground">Products</h1>
 			<p class="text-muted-foreground">Manage your product inventory and listings.</p>
 		</div>
-		<Button class="bg-primary text-primary-foreground hover:bg-primary/90">
-			<Plus class="mr-2 h-4 w-4" />
-			Add Product
-		</Button>
+		<a href="/admin/products/new">
+			<Button class="bg-primary text-primary-foreground hover:bg-primary/90">
+				<Plus class="mr-2 h-4 w-4" />
+				Add Product
+			</Button>
+		</a>
 	</div>
 
 	<!-- Filters and search -->

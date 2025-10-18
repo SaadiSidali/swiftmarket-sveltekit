@@ -28,6 +28,19 @@ export const columns: ColumnDef<Product>[] = [
 		header: 'Price'
 	},
 	{
-		accessorKey: 'in_stock'
+		accessorKey: 'in_stock',
+		header: 'In Stock'
+	},
+	{
+		header: 'Actions',
+		cell: ({ row }) => {
+			const id = row.getValue('id');
+			return renderSnippet(
+				createRawSnippet(() => ({
+					render: () =>
+						`<a href="/admin/products/${id}" class="text-primary hover:underline">Edit</a>`
+				}))
+			);
+		}
 	}
 ];

@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import logger from '@/logger';
 
 export const load = (async ({ locals }) => {
 	try {
@@ -18,9 +19,9 @@ export const load = (async ({ locals }) => {
 			carousels: structuredClone(carouselsRecords)
 		};
 	} catch (e) {
-		console.log(e);
+		logger.error(e);
 
-		console.log(`Couldnt load page /`);
+		logger.info(`Couldnt load page /`);
 		error(500, {
 			message: 'Couldnt load this page'
 		});
