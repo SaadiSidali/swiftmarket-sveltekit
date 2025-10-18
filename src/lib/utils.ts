@@ -8,6 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 
 export const POCKETBASEURL = env.PUBLIC_POCKETBASE_URL;
 
+export const WEBSITE_NAME = 'Sidali Store';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

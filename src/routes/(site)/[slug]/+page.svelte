@@ -1,50 +1,22 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import ImageGallery from '$lib/components/ImageGallery.svelte';
-	import { addToCart } from '$lib/stores';
-	import type { CartItem } from '$lib/stores';
+
 	import QuantityInput from '$lib/components/QuantityInput.svelte';
 	import ProductDetails from '$lib/components/ProductDetails.svelte';
 	import ProductItem from '$lib/components/ProductItem.svelte';
-	import { POCKETBASEURL } from '$lib/utils';
+	import { POCKETBASEURL, WEBSITE_NAME } from '$lib/utils';
 
-	interface Props {
-		data: any;
-	}
-
-	let { data }: Props = $props();
-	let original_data = $state(data);
+	let { data } = $props();
 	let product = $state(data);
 	let quantity = $state(1);
 
-	run(() => {
-		if (original_data !== data) {
-			product = data;
-			product.gallery = product.gallery;
-			quantity = 1;
-			original_data = data;
-		}
+	$effect(() => {
+		product = data;
 	});
-
-	function prepareToCart() {
-		let item: CartItem;
-		item = {
-			id: product.id,
-			name: product.name,
-			slug: product.slug,
-			thumbnail: `${product.gallery[0]}?thumb=100x100`,
-			price: product.price,
-			salePrice: product.sale_price,
-			quantity: quantity
-		};
-
-		addToCart(item);
-	}
 </script>
 
 <svelte:head>
-	<title>{product.name} | SwiftMarket</title>
+	<title>{product.name} | {WEBSITE_NAME}</title>
 </svelte:head>
 
 <div class="mx-3 flex flex-col gap-5 py-10 lg:mx-10 lg:flex-row lg:gap-8">
@@ -73,18 +45,12 @@
 			<p>Quantity</p>
 			<QuantityInput bind:count={quantity} />
 		</div>
-		<button
-			class="h-12 w-full bg-yellow-300 px-6 font-bold text-black transition-colors duration-150 hover:bg-yellow-500 focus:shadow"
-			onclick={() => prepareToCart()}
-		>
-			Add to cart
-		</button>
 	</div>
 </div>
 
 <div class="flex flex-col-reverse gap-20 px-10 lg:flex-row">
 	{#if product.details.length !== 0}
-		<ProductDetails source={product.details} />
+		<ProductDetails source={product.details} markdown={false} />
 	{/if}
 
 	{#if product.related_products.length !== 0}
@@ -102,7 +68,7 @@
 							: ''}
 						price={relatedProduct.price}
 						salePrice={relatedProduct.sale_price}
-						link="/products/{relatedProduct.slug}"
+						link="/{relatedProduct.slug}"
 					/>
 				{/each}
 			</div>

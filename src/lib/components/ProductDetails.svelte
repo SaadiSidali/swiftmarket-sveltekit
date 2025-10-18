@@ -1,12 +1,16 @@
 <script>
 	import Markdown from 'svelte-exmarkdown';
 
-	let { source = '' } = $props();
+	let { source = '', markdown = true } = $props();
 </script>
 
-<div class="flex basis-2/3 flex-col space-y-4 pb-10" id="markdown-container">
-	<Markdown md={source} />
-</div>
+<article class="prose flex basis-2/3 flex-col space-y-4 pb-10" id="markdown-container">
+	{#if markdown}
+		<Markdown md={source} />
+	{:else}
+		{@html source}
+	{/if}
+</article>
 
 <style>
 	:global(#markdown-container h1) {

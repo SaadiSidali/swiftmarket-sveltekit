@@ -4,13 +4,13 @@ import type { PageServerLoad } from './$types';
 export const load = (async ({ params, locals }) => {
 	try {
 		const productRecord = await locals.pb
-			.collection<Product>('products')
+			.collection<Product & { expand: { related_products: Product[] } }>('products')
 			.getFirstListItem(`slug="${params.slug}"`, {
 				expand: 'related_products'
 			});
 		console.log(`Loading product with slug: ${params.slug}`);
 
-		return structuredClone(productRecord);
+		return productRecord;
 	} catch (e) {
 		console.log(`Couldnt load page /shop/${params.slug}`);
 		error(404, {
