@@ -11,28 +11,3 @@
 		{@html source}
 	{/if}
 </article>
-
-<style>
-	:global(#markdown-container h1) {
-		font-size: 2.25rem;
-		line-height: 2.5rem;
-		font-weight: 700;
-	}
-
-	:global(#markdown-container h2) {
-		font-size: 1.875rem;
-		line-height: 2.25rem;
-		font-weight: 700;
-	}
-
-	:global(#markdown-container h3) {
-		font-size: 1.5rem;
-		line-height: 2rem;
-		font-weight: 700;
-	}
-
-	:global(#markdown-container ul) {
-		list-style-type: disc;
-		list-style-position: inside;
-	}
-</style>
