@@ -10,6 +10,21 @@ export const POCKETBASEURL = env.PUBLIC_POCKETBASE_URL;
 
 export const WEBSITE_NAME = 'Sidali Store';
 
+export function formatCurrency(amount: number | undefined | null) {
+	if (!amount) {
+		return '';
+	}
+
+	return amount.toLocaleString('dz-FR', {
+		style: 'currency',
+		currency: 'DZD',
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0,
+		currencyDisplay: 'symbol',
+		numberingSystem: 'latn'
+	});
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

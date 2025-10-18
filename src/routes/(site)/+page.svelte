@@ -53,7 +53,7 @@
 						: ''}
 					price={product.price}
 					salePrice={product.sale_price}
-					link="/products/{product.slug}"
+					link="/{product.slug}"
 				/>
 			{/each}
 		</div>

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { POCKETBASEURL } from '$lib/utils';
-	import { run } from 'svelte/legacy';
+	import { cn, POCKETBASEURL } from '$lib/utils';
+	import * as Carousel from '$lib/components/ui/carousel/index.js';
+	import type { CarouselAPI } from '$lib/components/ui/carousel/context.js';
 
 	interface Props {
 		productId: string;
@@ -10,47 +11,87 @@
 
 	let { productId, images = $bindable(), alt_text }: Props = $props();
 
-	let original_image = $state(images[0]);
+	let mainApi = $state<CarouselAPI>();
+	let thumbApi = $state<CarouselAPI>();
+	let current = $state(0);
 
-	let active_image = $state(images[0]);
+	$effect(() => {
+		if (!mainApi || !thumbApi) return;
 
-	run(() => {
-		if (original_image !== images[0]) {
-			active_image = images[0];
-			original_image = images[0];
-		}
+		// Sync thumbnail carousel with main carousel
+		current = mainApi.selectedScrollSnap();
+
+		mainApi.on('select', () => {
+			if (!mainApi || !thumbApi) return;
+			const selected = mainApi.selectedScrollSnap();
+			current = selected;
+			thumbApi.scrollTo(selected);
+		});
+
+		thumbApi.on('select', () => {
+			if (!mainApi || !thumbApi) return;
+			const selected = thumbApi.selectedScrollSnap();
+			mainApi.scrollTo(selected);
+		});
 	});
 
-	function setImage(src: string) {
-		active_image = src;
-		images = images;
-	}
-
-	function generateStyle(src: string) {
-		return src === active_image ? 'outline outline-2' : '';
+	function onThumbClick(index: number) {
+		if (!mainApi || !thumbApi) return;
+		mainApi.scrollTo(index);
 	}
 </script>
 
-<div class="flex flex-col gap-5">
-	<img
-		class="w-full"
-		src="{POCKETBASEURL}/api/files/products/{productId}/{active_image}"
-		width="700"
-		height="700"
-		alt={alt_text}
-	/>
+<div class="flex flex-col gap-3">
+	<Carousel.Root setApi={(eapi) => (mainApi = eapi)} class="relative w-full">
+		<Carousel.Content>
+			{#each images as image}
+				<Carousel.Item>
+					<div class="aspect-square">
+						<img
+							class="h-full w-full rounded-lg object-contain"
+							src="{POCKETBASEURL}/api/files/products/{productId}/{image}"
+							alt={alt_text}
+						/>
+					</div>
+				</Carousel.Item>
+			{/each}
+		</Carousel.Content>
+		<Carousel.Previous
+			class="absolute left-0 z-10 hidden  size-8 items-center justify-center bg-white/80 transition-opacity hover:opacity-100 lg:flex"
+		/>
+		<Carousel.Next
+			class="absolute right-0 z-10 hidden  size-8 items-center justify-center bg-white/80 transition-opacity hover:opacity-100 lg:flex"
+		/>
+	</Carousel.Root>
 
-	<div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
-		{#each images as image}
-			<button onclick={() => setImage(image)}>
-				<img
-					class={generateStyle(image)}
-					src="{POCKETBASEURL}/api/files/products/{productId}/{image}"
-					width="700"
-					height="700"
-					alt={alt_text}
-				/>
-			</button>
-		{/each}
-	</div>
+	<Carousel.Root
+		opts={{
+			containScroll: 'keepSnaps',
+			dragFree: true
+		}}
+		setApi={(eapi) => (thumbApi = eapi)}
+		class="w-full"
+	>
+		<Carousel.Content class="my-2 -ml-2">
+			{#each images as image, index}
+				<Carousel.Item class="basis-1/4 pl-2 lg:basis-1/6">
+					<button
+						onclick={() => onThumbClick(index)}
+						class={cn(
+							'relative size-full overflow-hidden rounded-lg transition-all',
+							index === current ? 'ring ring-primary' : 'opacity-60 hover:opacity-100'
+						)}
+					>
+						<div class="aspect-square">
+							<img
+								class="h-full w-full object-cover"
+								src="{POCKETBASEURL}/api/files/products/{productId}/{image}"
+								alt="{alt_text} thumbnail {index + 1}"
+							/>
+						</div>
+					</button>
+				</Carousel.Item>
+			{/each}
+		</Carousel.Content>
+	</Carousel.Root>
 </div>
