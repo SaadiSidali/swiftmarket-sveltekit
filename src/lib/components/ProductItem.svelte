@@ -8,21 +8,14 @@
 		link: string;
 	}
 
-	let {
-		title,
-		image,
-		hoverImage = '',
-		price,
-		salePrice = 0,
-		link
-	}: Props = $props();
+	let { title, image, hoverImage = '', price, salePrice = 0, link }: Props = $props();
 
 	let hovered = $state(false);
 </script>
 
-<div class="flex flex-col justify-center items-center">
+<div class="flex flex-col items-center justify-center">
 	<a
-		class="aspect-square block mb-6"
+		class="mb-6 block aspect-square"
 		href={link}
 		onmouseenter={() => (hovered = true)}
 		onmouseleave={() => (hovered = false)}
@@ -30,7 +23,7 @@
 		ontouchend={() => (hovered = false)}
 	>
 		<img
-			class="object-cover aspect-square"
+			class="aspect-square object-cover"
 			width="700"
 			height="700"
 			loading="lazy"
@@ -38,7 +31,7 @@
 			alt="{title} image"
 		/>
 	</a>
-	<div class="flex flex-col justify-start flex-grow text-center leading-tight gap-1">
+	<div class="flex flex-grow flex-col justify-start gap-1 text-center leading-tight">
 		<a href={link}>{title}</a>
 		<div class="flex justify-center gap-3">
 			{#if salePrice === 0}
