@@ -54,7 +54,7 @@
 	}
 </script>
 
-<section class="rounded-md border border-dashed border-gray-600 bg-gray-50/50 p-4" id="order-form">
+<section class="rounded-2xl border border-dashed border-gray-600 bg-gray-50/50 p-4" id="order-form">
 	<div class="flex flex-col gap-2">
 		<label for="name" class="font-medium">Name</label>
 		<input
