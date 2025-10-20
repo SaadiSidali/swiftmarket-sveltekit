@@ -87,7 +87,7 @@
 		<label for="wilaya" class="font-medium">Select Wilaya</label>
 		<select id="wilaya" bind:value={selectedWilaya} class="rounded-2xl border border-gray-300 p-2">
 			<option value="" disabled selected>Select a Wilaya</option>
-			{#each WILAYAS as wilaya}
+			{#each WILAYAS.sort((a, b) => a.name.localeCompare(b.name)) as wilaya}
 				<option value={wilaya.name}>{wilaya.name}</option>
 			{/each}
 		</select>
@@ -101,7 +101,7 @@
 			<label for="city" class="font-medium">Select City</label>
 			<select id="city" bind:value={selectedCity} class="rounded-2xl border border-gray-300 p-2">
 				<option value="" disabled selected>Select a City</option>
-				{#each availableCities as city}
+				{#each availableCities.sort((a, b) => a.name.localeCompare(b.name)) as city}
 					<option value={city.name}>{city.name}</option>
 				{/each}
 			</select>
