@@ -25,6 +25,62 @@ export function formatCurrency(amount: number | undefined | null) {
 	});
 }
 
+export function getImageUrl({
+	collectionName,
+	recordId,
+	imageFileName
+}: {
+	collectionName: string;
+	recordId: string;
+	imageFileName: string;
+}) {
+	return `${POCKETBASEURL}/api/files/${collectionName}/${recordId}/${imageFileName}`;
+}
+
+export function getThumbnailUrl({
+	collectionName,
+	recordId,
+	imageFileName,
+	width,
+	height,
+	crop = 'center'
+}: {
+	collectionName: string;
+	recordId: string;
+	imageFileName: string;
+	width: number;
+	height: number;
+	crop?: 'center' | 'top' | 'bottom' | 'left' | 'right';
+}) {
+	return `${POCKETBASEURL}/api/files/${collectionName}/${recordId}/${imageFileName}?thumb=${width}x${height}&thumb_crop=${crop}`;
+}
+
+export function getProductImageUrl({
+	productId,
+	imageFileName,
+	thumb = false
+}: {
+	productId: string;
+	imageFileName: string;
+	thumb?: boolean;
+}) {
+	if (thumb) {
+		return getThumbnailUrl({
+			collectionName: 'products',
+			recordId: productId,
+			imageFileName,
+			width: 300,
+			height: 300,
+			crop: 'center'
+		});
+	} else {
+		return getImageUrl({
+			collectionName: 'products',
+			recordId: productId,
+			imageFileName
+		});
+	}
+}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

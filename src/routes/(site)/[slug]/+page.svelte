@@ -24,7 +24,7 @@
 <div
 	class="flex flex-col justify-center gap-5 py-10 md:container md:mx-auto lg:grid lg:grid-cols-2 lg:gap-8"
 >
-	<div class="max-w-2xl basis-1/2 px-8 lg:max-h-[600px] lg:overflow-hidden lg:px-0">
+	<div class="max-w-2xl basis-1/2 md:px-8 lg:max-h-[600px] lg:overflow-hidden lg:px-0">
 		<ImageGallery productId={product.id} images={product.gallery} alt_text={product.name} />
 	</div>
 	<div class="flex basis-1/2 flex-col gap-3 px-8">
