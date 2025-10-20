@@ -36,7 +36,7 @@
 	</div>
 </div>
 
-<div class="flex flex-col gap-20 px-10 lg:container lg:mx-auto">
+<div class="flex w-full flex-col gap-20 px-10 lg:container lg:mx-auto">
 	{#if product.details.length !== 0}
 		<ProductDetails source={product.details} markdown={false} />
 	{/if}
