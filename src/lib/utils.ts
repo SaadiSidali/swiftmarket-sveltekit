@@ -2,6 +2,8 @@ import { env } from '$env/dynamic/public';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+const CDN_URL = 'https://cdn.storesdz.com';
+
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
