@@ -50,8 +50,6 @@
 	let columnsDialog: InsertColumnsDialog;
 	let tableDialog: InsertTableDialog;
 	let youtubeDialog: InsertYoutubeDialog;
-	let tweetDialog: InsertTweetDialog;
-	let blueskyDialog: InsertBlueskyDialog;
 </script>
 
 <Toolbar>

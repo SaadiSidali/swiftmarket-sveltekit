@@ -17,3 +17,11 @@ export const getProductsQuery = ({ filter, page }: { page: number; filter: strin
 	});
 	return q;
 };
+
+export const getMediaQuery = ({ page }: { page: number }) => {
+	const q = createQuery({
+		queryKey: ['media', page],
+		queryFn: () => pb.collection('media').getList(page, CONFIG.PER_PAGE)
+	});
+	return q;
+};

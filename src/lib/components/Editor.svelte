@@ -84,7 +84,7 @@
 
 	const initialConfig = {
 		editorState: prepopulatedRichText,
-		namespace: 'Playground',
+		namespace: 'MyEditor',
 		nodes: [
 			HeadingNode,
 			ListNode,
@@ -104,8 +104,7 @@
 			TableCellNode,
 			TableRowNode,
 			YouTubeNode,
-			TweetNode,
-			BlueskyNode
+			TweetNode
 		],
 		onError: (error: Error) => {
 			throw error;
@@ -115,13 +114,6 @@
 		}
 	};
 	let composer: Composer;
-
-	let imageDialog: InsertImageDialog;
-	let columnsDialog: InsertColumnsDialog;
-	let tableDialog: InsertTableDialog;
-	let youtubeDialog: InsertYoutubeDialog;
-	let tweetDialog: InsertTweetDialog;
-	let blueskyDialog: InsertBlueskyDialog;
 </script>
 
 <Composer {initialConfig} bind:this={composer}>
@@ -133,6 +125,7 @@
 			<HashtagPlugin />
 			<AutoLinkPlugin />
 			<ColumnLayoutPlugin />
+			<ImagePlugin />
 
 			<div class="editor-scroller">
 				<div class="editor">

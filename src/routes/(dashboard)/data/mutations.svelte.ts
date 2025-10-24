@@ -2,7 +2,7 @@ import { pb } from '@/pocketbase';
 import { createMutation, createQuery } from '@tanstack/svelte-query';
 import { CONFIG } from '../config';
 
-export const createMediaMutatuin = () => {
+export const createMediaMutation = () => {
 	const m = createMutation({
 		mutationFn: async (file: File) => {
 			const formData = new FormData();
