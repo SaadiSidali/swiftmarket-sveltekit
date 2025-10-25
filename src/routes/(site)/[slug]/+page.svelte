@@ -25,7 +25,7 @@
 	class="flex flex-col justify-center gap-5 py-10 md:container md:mx-auto lg:grid lg:grid-cols-2 lg:gap-8"
 >
 	<div class="max-w-2xl basis-1/2 md:px-8 lg:max-h-[600px] lg:overflow-hidden lg:px-0">
-		<ImageGallery productId={product.id} images={product.gallery} alt_text={product.name} />
+		<ImageGallery productId={product.id} images={product.expand.gallery} alt_text={product.name} />
 	</div>
 	<div class="flex basis-1/2 flex-col gap-3 px-8">
 		<ProductInfo {product} />
@@ -49,11 +49,8 @@
 				{#each product.expand.related_products as relatedProduct (relatedProduct.id)}
 					<ProductItem
 						title={relatedProduct.name}
-						image="{POCKETBASEURL}/api/files/{relatedProduct.collectionName}/{relatedProduct.id}/{relatedProduct
-							.gallery[0]}"
-						hoverImage={relatedProduct.gallery.length > 1
-							? `${POCKETBASEURL}/api/files/${relatedProduct.collectionName}/${relatedProduct.id}/${relatedProduct.gallery[1]}`
-							: ''}
+						image={relatedProduct.expand.image.url}
+						hoverImage={relatedProduct.expand.image.url}
 						price={relatedProduct.price}
 						salePrice={relatedProduct.sale_price}
 						link="/{relatedProduct.slug}"

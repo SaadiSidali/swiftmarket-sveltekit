@@ -5,7 +5,7 @@
 
 	interface Props {
 		productId: string;
-		images: string[];
+		images: Media[];
 		alt_text: string;
 	}
 
@@ -80,10 +80,7 @@
 							<div class="aspect-square">
 								<img
 									class="h-full w-full object-cover"
-									src={getProductImageUrl({
-										productId,
-										imageFileName: image
-									})}
+									src={image.url}
 									alt="{alt_text} thumbnail {index + 1}"
 								/>
 							</div>
@@ -100,14 +97,7 @@
 				{#each images as image}
 					<Item>
 						<div class="aspect-square rounded-md bg-gray-100">
-							<img
-								class="h-full w-full rounded-lg object-contain"
-								src={getProductImageUrl({
-									productId,
-									imageFileName: image
-								})}
-								alt={alt_text}
-							/>
+							<img class="h-full w-full rounded-lg object-contain" src={image.url} alt={alt_text} />
 						</div>
 					</Item>
 				{/each}

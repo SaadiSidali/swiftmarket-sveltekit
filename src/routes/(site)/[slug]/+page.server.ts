@@ -5,10 +5,20 @@ import logger from '@/logger';
 export const load = (async ({ params, locals }) => {
 	try {
 		const productRecord = await locals.pb
-			.collection<Product & { expand: { related_products: Product[] } }>('products')
+			.collection<
+				Product & {
+					expand: {
+						related_products: (Product & { expand: { image: Media } })[];
+						gallery: Media[];
+						image: Media;
+					};
+				}
+			>('products')
 			.getFirstListItem(`slug="${params.slug}"`, {
-				expand: 'related_products'
+				expand: 'related_products,gallery,image,related_products.image'
 			});
+		console.log('Product:', productRecord);
+
 		logger.info(`Loading product with slug: ${params.slug}`);
 
 		return productRecord;

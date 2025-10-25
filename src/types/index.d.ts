@@ -25,3 +25,14 @@ interface ProductsResponse {
 	totalItems: number;
 	totalPages: number;
 }
+
+interface Media {
+	id: string;
+	created: string; // ISO timestamp
+	updated: string; // ISO timestamp
+	name: string;
+	original_name: string;
+	mime_type: string;
+	size: number;
+	url: string;
+}

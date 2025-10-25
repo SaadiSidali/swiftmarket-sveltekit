@@ -1,6 +1,18 @@
 import sharp from 'sharp';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { json } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
+
+const s3 = new S3Client({
+	region: 'auto',
+	endpoint: env.S3_ENDPOINT!,
+	credentials: {
+		accessKeyId: env.S3_ACCESS_KEY_ID!,
+		secretAccessKey: env.S3_SECRET_ACCESS_KEY!
+	}
+});
+
+const BUCKET_NAME = env.S3_BUCKET!;
 
 export async function POST({ request }) {
 	const formData = await request.formData();
@@ -42,8 +54,8 @@ export async function POST({ request }) {
 			})
 		);
 
-		const imageUrl = `https://${BUCKET_NAME}.s3.YOUR_S3_REGION.amazonaws.com/products/${webpFilename}`;
-		const thumbnailUrl = `https://${BUCKET_NAME}.s3.YOUR_S3_REGION.amazonaws.com/products/${thumbFilename}`;
+		const imageUrl = `${env.R2_PUBLIC_URL}/products/${webpFilename}`;
+		const thumbnailUrl = `${env.R2_PUBLIC_URL}/products/${thumbFilename}`;
 
 		return json({ imageUrl, thumbnailUrl });
 	} catch (error) {
