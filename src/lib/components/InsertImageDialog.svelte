@@ -43,6 +43,6 @@
 
 <Dialog.Root bind:open={showModal}>
 	<Dialog.Content class="w-full md:max-w-2xl">
-		<UploadImage onselect={onSelect} />
+		<UploadImage onImageSelect={onSelect} />
 	</Dialog.Content>
 </Dialog.Root>

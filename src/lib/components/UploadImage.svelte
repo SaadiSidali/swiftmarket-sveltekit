@@ -8,7 +8,15 @@
 
 	const queryClient = useQueryClient();
 
-	const { onselect } = $props();
+	interface ImageFile {
+		id: string;
+		name: string;
+		size: number;
+		uploadedAt: string;
+		preview: string;
+	}
+
+	const { onImageSelect = (image: ImageFile) => {} } = $props();
 
 	interface UploadedFile {
 		id: string;

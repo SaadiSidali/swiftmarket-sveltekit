@@ -8,7 +8,9 @@ import logger from '@/logger';
 const pb = new PocketBase(POCKETBASEURL);
 const authHandle: Handle = async ({ event, resolve }) => {
 	// Get the auth cookie
+
 	const authCookie = event.cookies.get('pb_auth');
+
 	event.locals.pb = pb;
 	let user = null;
 
@@ -29,6 +31,8 @@ const authHandle: Handle = async ({ event, resolve }) => {
 			event.locals.user = null;
 			user = null;
 		}
+	} else {
+		event.locals.user = null;
 	}
 
 	const response = await resolve(event);
@@ -40,19 +44,13 @@ const authHandle: Handle = async ({ event, resolve }) => {
 };
 
 const protectHandle: Handle = async ({ event, resolve }) => {
-	// if the error is 404, do not protect
-	if (event.url.pathname.startsWith('/admin') && event.locals.user) {
-		if (event.locals.user?.record?.role !== 'admin') {
-			redirect(302, '/');
-		}
+	console.log('Protect Handle:', event.url.pathname);
+	console.log('User:', event.locals.user);
+	if (event.url.pathname.startsWith('/admin') && !event.locals.user) {
+		redirect(302, '/login');
 	}
 
 	return resolve(event);
 };
 
-const secondHandle: Handle = async ({ event, resolve }) => {
-	const response = await resolve(event);
-	return response;
-};
-
-export const handle = sequence(authHandle, protectHandle, secondHandle);
+export const handle = sequence(authHandle, protectHandle);

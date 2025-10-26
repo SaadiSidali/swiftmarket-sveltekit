@@ -10,6 +10,7 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { Input } from '$lib/components/ui/input';
 	import { Search, Filter, Download, Eye, MoreHorizontal } from '@lucide/svelte';
+	import { getOrdersQuery } from '../../data/queries.svelte';
 
 	// Sample order data
 	const orders = [
@@ -93,7 +94,13 @@
 			day: 'numeric'
 		});
 	}
+	const ordersQuery = getOrdersQuery({
+		page: 1,
+		filter: ''
+	});
 </script>
+
+<pre>{JSON.stringify($ordersQuery, null, 2)}</pre>
 
 <div class="container mx-auto space-y-6">
 	<!-- Page header -->

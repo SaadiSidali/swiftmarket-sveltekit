@@ -5,7 +5,10 @@ import { CONFIG } from '../config';
 export const getOrdersQuery = ({ filter, page }: { page: number; filter: string }) => {
 	const q = createQuery({
 		queryKey: ['orders', page, filter],
-		queryFn: () => pb.collection('orders').getList(page, CONFIG.PER_PAGE, { filter })
+		queryFn: () =>
+			pb
+				.collection('orders')
+				.getList(page, CONFIG.PER_PAGE, { filter, expand: 'products,products.image' })
 	});
 	return q;
 };
