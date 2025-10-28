@@ -5,6 +5,8 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
+	import { createMediaMutation } from '../../routes/(dashboard)/data/mutations.svelte';
+	import { getMediaQuery } from '../../routes/(dashboard)/data/queries.svelte';
 
 	const queryClient = useQueryClient();
 
@@ -29,40 +31,17 @@
 	let fileInput = $state<HTMLInputElement>();
 	let searchQuery = $state('');
 
-	const filesQuery = createQuery({
-		queryKey: ['uploadedFiles'],
-		queryFn: async () => {
-			// Simulate API delay
-			await new Promise((resolve) => setTimeout(resolve, 500));
-			return [
-				{ id: '1', name: 'document.pdf', size: 2048000, uploadedAt: '2025-10-20' },
-				{ id: '2', name: 'presentation.pptx', size: 5120000, uploadedAt: '2025-10-19' },
-				{ id: '3', name: 'spreadsheet.xlsx', size: 1024000, uploadedAt: '2025-10-18' }
-			] as UploadedFile[];
-		}
+	const filesQuery = getMediaQuery({
+		page: 1
 	});
 
-	const uploadMutation = createMutation({
-		mutationFn: async (file: File) => {
-			// Simulate API delay
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			return {
-				id: Math.random().toString(36).substr(2, 9),
-				name: file.name,
-				size: file.size,
-				uploadedAt: new Date().toISOString().split('T')[0]
-			} as UploadedFile;
-		},
-		onSuccess: (newFile) => {
-			// Invalidate and refetch the files query
-			queryClient.setQueryData(['uploadedFiles'], (old: UploadedFile[]) => [newFile, ...old]);
-		}
-	});
+	const uploadMutation = createMediaMutation();
 
-	const filteredFiles =
-		$filesQuery.data?.filter((file) =>
+	const filteredFiles = $derived(
+		$filesQuery.data?.items.filter((file) =>
 			file.name.toLowerCase().includes(searchQuery.toLowerCase())
-		) ?? [];
+		) ?? []
+	);
 
 	function handleDrag(e: DragEvent) {
 		e.preventDefault();
@@ -85,9 +64,7 @@
 	}
 
 	function handleFiles(files: FileList) {
-		Array.from(files).forEach((file) => {
-			$uploadMutation.mutate(file);
-		});
+		$uploadMutation.mutate(files);
 	}
 
 	function handleInputChange(e: Event) {
@@ -207,9 +184,9 @@
 						<p class="text-sm text-muted-foreground">Loading files...</p>
 					{:else if $filesQuery.isError}
 						<p class="text-sm text-destructive">Failed to load files</p>
-					{:else if $filesQuery.data && $filesQuery.data.length > 0}
+					{:else if $filesQuery.data && $filesQuery.data.items.length > 0}
 						<div class="space-y-2">
-							{#each $filesQuery.data as file (file.id)}
+							{#each $filesQuery.data.items as file (file.id)}
 								<div
 									class="flex items-center justify-between rounded-lg border border-border p-3 transition-colors hover:bg-muted/50"
 								>
@@ -218,7 +195,7 @@
 										<div class="min-w-0">
 											<p class="truncate text-sm font-medium text-foreground">{file.name}</p>
 											<p class="text-xs text-muted-foreground">
-												{formatFileSize(file.size)} • {file.uploadedAt}
+												{formatFileSize(file.size)} • {file.created}
 											</p>
 										</div>
 									</div>
@@ -273,7 +250,11 @@
 								<div
 									class="mb-2 flex h-16 w-16 items-center justify-center rounded bg-muted text-3xl"
 								>
-									{getFileIcon(file.name)}
+									<img
+										src={file.url}
+										alt={file.name}
+										class="max-h-16 max-w-16 rounded object-contain"
+									/>
 								</div>
 								<p class="line-clamp-2 text-center text-xs font-medium text-foreground">
 									{file.name}
