@@ -3,7 +3,7 @@ import { createMutation, createQuery } from '@tanstack/svelte-query';
 import { CONFIG } from '../config';
 import { getJwtFromLocalStorage } from '../utils';
 
-async function uploadFiles(files: FileList): Promise<string[]> {
+async function uploadFiles(files: FileList): Promise<Media[]> {
 	const jwt = getJwtFromLocalStorage();
 
 	const uploadPromises = Array.from(files).map(async (file) => {
@@ -23,9 +23,12 @@ async function uploadFiles(files: FileList): Promise<string[]> {
 	return Promise.all(uploadPromises);
 }
 
-export const createMediaMutation = () => {
+export const createMediaMutation = ({ onSuccess }: { onSuccess?: (data: Media[]) => void }) => {
 	const m = createMutation({
-		mutationFn: uploadFiles
+		mutationFn: uploadFiles,
+		onSuccess: (data) => {
+			if (onSuccess) onSuccess(data);
+		}
 	});
 
 	return m;

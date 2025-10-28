@@ -147,7 +147,7 @@ export async function POST({ request }: RequestEvent) {
 			name: name || imageFile.name
 		});
 
-		return json({ imageUrl, thumbnailUrl, mediaId: mediaRecord.id });
+		return json(mediaRecord);
 	} catch (error) {
 		console.error('Image processing error:', error);
 		return json({ error: 'Failed to process and upload image.' }, { status: 500 });

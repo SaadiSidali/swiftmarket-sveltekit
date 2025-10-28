@@ -43,6 +43,12 @@
 
 <Dialog.Root bind:open={showModal}>
 	<Dialog.Content class="w-full md:max-w-2xl">
-		<UploadImage onImageSelect={onSelect} />
+		<UploadImage
+			onImageSelect={(media) =>
+				onSelect({
+					altText: media.name,
+					src: media.url
+				})}
+		/>
 	</Dialog.Content>
 </Dialog.Root>

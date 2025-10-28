@@ -18,13 +18,11 @@
 		ListItemNode,
 		HorizontalRuleNode,
 		ImageNode,
-		TreeViewPlugin,
 		PlaceHolder,
 		KeywordPlugin,
 		KeywordNode,
 		HashtagPlugin,
 		HashtagNode,
-		CollaborationPlugin,
 		PlainTextPlugin,
 		AutoLinkPlugin,
 		AutoLinkNode,
@@ -36,7 +34,6 @@
 		CodeHighlightNode,
 		CodeHighlightPlugin,
 		CodeActionMenuPlugin,
-		CaptionEditorCollaborationPlugin,
 		CaptionEditorHistoryPlugin,
 		CAN_USE_DOM,
 		MarkdownShortcutPlugin,
@@ -54,9 +51,6 @@
 		YoutubePlugin,
 		YouTubeNode,
 		TweetNode,
-		TwitterPlugin,
-		BlueskyPlugin,
-		BlueskyNode,
 		TabIndentationPlugin,
 		Toolbar,
 		FontFamilyDropDown,
@@ -69,9 +63,7 @@
 		FormatCodeButton,
 		InsertColumnsDialog,
 		InsertTableDialog,
-		InsertYoutubeDialog,
-		InsertTweetDialog,
-		InsertBlueskyDialog
+		InsertYoutubeDialog
 	} from 'svelte-lexical';
 
 	import { theme } from 'svelte-lexical/dist/themes/default';
@@ -114,26 +106,42 @@
 		}
 	};
 	let composer: Composer;
+	let editorDiv: HTMLDivElement | undefined = $state();
 </script>
 
 <Composer {initialConfig} bind:this={composer}>
 	<div class="editor-shell svelte-lexical">
 		<EditorToolbar />
 		<div class="editor-container prose min-w-full">
+			<div class="editor-scroller">
+				<div class="editor" bind:this={editorDiv}>
+					<ContentEditable />
+				</div>
+			</div>
 			<AutoFocusPlugin />
 			<KeywordPlugin {keywordsRegex} />
 			<HashtagPlugin />
 			<AutoLinkPlugin />
 			<ColumnLayoutPlugin />
 			<ImagePlugin />
-
-			<div class="editor-scroller">
-				<div class="editor">
-					<ContentEditable />
-				</div>
-			</div>
+			<CaptionEditorHistoryPlugin />
+			<TablePlugin />
+			<TableCellResizerPlugin />
+			<TableHoverActionPlugin anchorElem={editorDiv} />
+			<TableActionMenuPlugin anchorElem={editorDiv} cellMerge />
+			<TabIndentationPlugin />
+			<ListPlugin />
+			<CheckListPlugin />
+			<CodeHighlightPlugin />
+			<SharedHistoryPlugin />
+			<YoutubePlugin />
+			<PlainTextPlugin />
+			<FloatingLinkEditorPlugin />
+			<LinkPlugin />
 			<RichTextPlugin />
 			<HorizontalRulePlugin />
+			<CodeActionMenuPlugin />
+			<!-- <MarkdownShortcutPlugin  /> -->
 		</div>
 	</div>
 </Composer>

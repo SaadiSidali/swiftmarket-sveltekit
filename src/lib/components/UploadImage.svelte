@@ -18,7 +18,11 @@
 		preview: string;
 	}
 
-	const { onImageSelect = (image: ImageFile) => {} } = $props();
+	type Props = {
+		onImageSelect: (image: Media) => void;
+	};
+
+	const { onImageSelect }: Props = $props();
 
 	interface UploadedFile {
 		id: string;
@@ -35,7 +39,15 @@
 		page: 1
 	});
 
-	const uploadMutation = createMediaMutation();
+	const uploadMutation = createMediaMutation({
+		onSuccess(data) {
+			if (data && data.length > 0) {
+				for (const file of data) {
+					onSelect(file);
+				}
+			}
+		}
+	});
 
 	const filteredFiles = $derived(
 		$filesQuery.data?.items.filter((file) =>
@@ -82,11 +94,8 @@
 		return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
 	}
 
-	function onSelect(image: { src: string; altText: string; width: number; height: number }) {
-		const event = new CustomEvent('selectImage', {
-			detail: image
-		});
-		dispatchEvent(event);
+	function onSelect(media: Media) {
+		onImageSelect(media);
 	}
 
 	function getFileIcon(fileName: string) {
@@ -199,17 +208,8 @@
 											</p>
 										</div>
 									</div>
-									<Button
-										variant="ghost"
-										size="sm"
-										class="shrink-0"
-										onclick={() =>
-											onSelect({
-												src: `/uploads/${file.name}`,
-												altText: file.name,
-												width: 600,
-												height: 400
-											})}>Select</Button
+									<Button variant="ghost" size="sm" class="shrink-0" onclick={() => onSelect(file)}
+										>Select</Button
 									>
 								</div>
 							{/each}
@@ -237,13 +237,7 @@
 					<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
 						{#each filteredFiles as file (file.id)}
 							<button
-								onclick={() =>
-									onSelect({
-										src: `/uploads/${file.name}`,
-										altText: file.name,
-										width: 600,
-										height: 400
-									})}
+								onclick={() => onSelect(file)}
 								class="group relative flex flex-col items-center justify-center rounded-lg border border-border bg-muted/30 p-4 transition-all hover:border-primary hover:bg-muted/60"
 							>
 								<!-- Thumbnail Placeholder -->
