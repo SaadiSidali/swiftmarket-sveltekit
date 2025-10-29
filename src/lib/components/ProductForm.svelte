@@ -7,6 +7,10 @@
 	import { RichTextComposer } from 'svelte-lexical';
 	import { theme } from 'svelte-lexical/dist/themes/default';
 	import Editor from './Editor.svelte';
+	import UploadImage from './UploadImage.svelte';
+	import { X, Plus } from '@lucide/svelte';
+	import { cn } from '$lib/utils';
+	import ProductFormAddImage from './ProductFormAddImage.svelte';
 
 	interface Product {
 		id?: string;
@@ -71,11 +75,27 @@
 			formData.slug = generateSlug(target.value);
 		}
 	}
+
+	function onImageSelect(media: Media) {
+		if (!formData.gallery) {
+			formData.gallery = [];
+		}
+		formData.gallery = [...formData.gallery, media.url];
+	}
+
+	function removeImage(index: number) {
+		if (formData.gallery) {
+			formData.gallery = formData.gallery.filter((_, i) => i !== index);
+		}
+	}
 </script>
 
-<form onsubmit={handleSubmit} class="mx-auto w-full max-w-4xl">
+<form onsubmit={handleSubmit} class="container mx-auto w-full pt-3 pb-16">
 	<div class="space-y-8">
 		<div class="space-y-4">
+			<h2 class="text-xl font-semibold text-foreground">Gallery</h2>
+			<ProductFormAddImage {onImageSelect} {removeImage} gallery={formData.gallery} />
+
 			<h2 class="text-xl font-semibold text-foreground">Basic Information</h2>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div class="space-y-2">
@@ -111,11 +131,6 @@
 					bind:value={formData.description}
 					class="min-h-24 w-full"
 				/>
-			</div>
-
-			<div class="space-y-2">
-				<Label for="details">Details</Label>
-				<Editor />
 			</div>
 		</div>
 
@@ -173,78 +188,10 @@
 					<Label for="is_active" class="cursor-pointer font-normal">Active</Label>
 				</div>
 			</div>
-		</div>
 
-		<div class="space-y-4">
-			<h2 class="text-xl font-semibold text-foreground">Relations</h2>
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div class="space-y-2">
-					<Label for="categories">Categories</Label>
-					<Input
-						id="categories"
-						type="text"
-						placeholder="Enter categories (comma-separated)"
-						value={formData.categories?.join(', ') || ''}
-						onchange={(e) => {
-							const target = e.target as HTMLInputElement;
-							formData.categories = target.value
-								.split(',')
-								.map((c) => c.trim())
-								.filter((c) => c);
-						}}
-						class="w-full"
-					/>
-				</div>
-				<div class="space-y-2">
-					<Label for="related_products">Related Products</Label>
-					<Input
-						id="related_products"
-						type="text"
-						placeholder="Enter product IDs (comma-separated)"
-						value={formData.related_products?.join(', ') || ''}
-						onchange={(e) => {
-							const target = e.target as HTMLInputElement;
-							formData.related_products = target.value
-								.split(',')
-								.map((p) => p.trim())
-								.filter((p) => p);
-						}}
-						class="w-full"
-					/>
-				</div>
-			</div>
-		</div>
-
-		<div class="space-y-4">
-			<h2 class="text-xl font-semibold text-foreground">Media</h2>
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div class="space-y-2">
-					<Label for="image">Main Image</Label>
-					<Input
-						id="image"
-						type="text"
-						placeholder="Image URL"
-						bind:value={formData.image}
-						class="w-full"
-					/>
-				</div>
-				<div class="space-y-2">
-					<Label for="gallery">Gallery Images</Label>
-					<Input
-						id="gallery"
-						type="text"
-						placeholder="Image URLs (comma-separated)"
-						value={formData.gallery?.join(', ') || ''}
-						onchange={(e) => {
-							const target = e.target as HTMLInputElement;
-							formData.gallery = target.value
-								.split(',')
-								.map((url) => url.trim())
-								.filter((url) => url);
-						}}
-						class="w-full"
-					/>
-				</div>
+			<div class="space-y-2">
+				<Label for="details">Details</Label>
+				<Editor />
 			</div>
 		</div>
 

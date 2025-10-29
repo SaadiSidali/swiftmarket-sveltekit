@@ -4,6 +4,7 @@ import { json, type RequestEvent } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import { env as penv } from '$env/dynamic/public';
 import PocketBase from 'pocketbase';
+import { slugify } from '../../(dashboard)/utils';
 
 const s3 = new S3Client({
 	region: 'auto',
@@ -48,8 +49,30 @@ interface ProcessedImages {
 }
 
 async function processImage(imageBuffer: Buffer): Promise<ProcessedImages> {
-	const webpBuffer = await sharp(imageBuffer).webp({ quality: 80 }).toBuffer();
-	const thumbBuffer = await sharp(imageBuffer).resize(300, 300).webp({ quality: 80 }).toBuffer();
+	const metadata = await sharp(imageBuffer).metadata();
+	const maxWidth = 1920;
+	const maxHeight = 1920;
+
+	let resizeOptions = {};
+	if (metadata.width && metadata.height) {
+		if (metadata.width > maxWidth || metadata.height > maxHeight) {
+			resizeOptions = {
+				width: maxWidth,
+				height: maxHeight,
+				fit: 'inside' as const,
+				withoutEnlargement: true
+			};
+		}
+	}
+
+	const webpBuffer = await sharp(imageBuffer)
+		.resize(resizeOptions)
+		.webp({ quality: 75 })
+		.toBuffer();
+	const thumbBuffer = await sharp(imageBuffer)
+		.resize({ width: 300, height: 300, fit: 'contain' })
+		.webp({ quality: 75 })
+		.toBuffer();
 	return { webpBuffer, thumbBuffer };
 }
 
@@ -129,20 +152,23 @@ export async function POST({ request }: RequestEvent) {
 		const imageBuffer = Buffer.from(await imageFile.arrayBuffer());
 		const { webpBuffer, thumbBuffer } = await processImage(imageBuffer);
 
+		// Generate random string for unique path
+		const randomString = Math.random().toString(36).substring(2, 15);
+
 		// Upload to S3
-		await uploadToS3(`products/${webpFilename}`, webpBuffer);
-		await uploadToS3(`products/${thumbFilename}`, thumbBuffer);
+		await uploadToS3(`products/${randomString}_${slugify(webpFilename)}`, webpBuffer);
+		await uploadToS3(`products/${randomString}_${slugify(thumbFilename)}`, thumbBuffer);
 
 		// Generate URLs
-		const imageUrl = `${env.R2_CDN_URL}/products/${webpFilename}`;
-		const thumbnailUrl = `${env.R2_CDN_URL}/products/${thumbFilename}`;
+		const imageUrl = `${env.R2_CDN_URL}/products/${randomString}_${slugify(webpFilename)}`;
+		const thumbnailUrl = `${env.R2_CDN_URL}/products/${randomString}_${slugify(thumbFilename)}`;
 
 		// Create media record
 		const mediaRecord = await createMediaRecord({
 			webpFilename,
 			imageUrl,
 			thumbnailUrl,
-			size: imageBuffer.length,
+			size: webpBuffer.length,
 			originalFilename: imageFile.name,
 			name: name || imageFile.name
 		});

@@ -110,9 +110,9 @@
 </script>
 
 <Composer {initialConfig} bind:this={composer}>
-	<div class="editor-shell svelte-lexical">
+	<div class="editor-shell svelte-lexical w-full max-w-full">
 		<EditorToolbar />
-		<div class="editor-container prose min-w-full">
+		<div class="editor-container prose min-w-full prose-img:max-w-full">
 			<div class="editor-scroller">
 				<div class="editor" bind:this={editorDiv}>
 					<ContentEditable />

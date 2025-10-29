@@ -41,10 +41,10 @@
 
 	const uploadMutation = createMediaMutation({
 		onSuccess(data) {
-			if (data && data.length > 0) {
-				for (const file of data) {
-					onSelect(file);
-				}
+			console.log('Data uploaded', data);
+
+			if (data) {
+				onSelect(data);
 			}
 		}
 	});
@@ -71,18 +71,18 @@
 		dragActive = false;
 		const files = e.dataTransfer?.files;
 		if (files && files.length > 0) {
-			handleFiles(files);
+			handleFiles(files[0]);
 		}
 	}
 
-	function handleFiles(files: FileList) {
-		$uploadMutation.mutate(files);
+	function handleFiles(file: File) {
+		$uploadMutation.mutate(file);
 	}
 
 	function handleInputChange(e: Event) {
 		const input = e.target as HTMLInputElement;
 		if (input.files) {
-			handleFiles(input.files);
+			handleFiles(input.files[0]);
 		}
 	}
 
@@ -96,27 +96,6 @@
 
 	function onSelect(media: Media) {
 		onImageSelect(media);
-	}
-
-	function getFileIcon(fileName: string) {
-		const ext = fileName.split('.').pop()?.toLowerCase();
-		switch (ext) {
-			case 'pdf':
-				return '📄';
-			case 'pptx':
-			case 'ppt':
-				return '📊';
-			case 'xlsx':
-			case 'xls':
-				return '📈';
-			case 'jpg':
-			case 'jpeg':
-			case 'png':
-			case 'gif':
-				return '🖼️';
-			default:
-				return '📁';
-		}
 	}
 </script>
 
@@ -185,39 +164,6 @@
 						<p class="text-sm text-red-600 dark:text-red-400">Upload failed. Please try again.</p>
 					</div>
 				{/if}
-
-				<!-- Recently Uploaded Files -->
-				<div>
-					<h3 class="mb-3 font-semibold text-foreground">Recently Uploaded</h3>
-					{#if $filesQuery.isPending}
-						<p class="text-sm text-muted-foreground">Loading files...</p>
-					{:else if $filesQuery.isError}
-						<p class="text-sm text-destructive">Failed to load files</p>
-					{:else if $filesQuery.data && $filesQuery.data.items.length > 0}
-						<div class="space-y-2">
-							{#each $filesQuery.data.items as file (file.id)}
-								<div
-									class="flex items-center justify-between rounded-lg border border-border p-3 transition-colors hover:bg-muted/50"
-								>
-									<div class="flex min-w-0 flex-1 items-center gap-3">
-										<LucideFile class="h-5 w-5 shrink-0 text-muted-foreground" />
-										<div class="min-w-0">
-											<p class="truncate text-sm font-medium text-foreground">{file.name}</p>
-											<p class="text-xs text-muted-foreground">
-												{formatFileSize(file.size)} • {file.created}
-											</p>
-										</div>
-									</div>
-									<Button variant="ghost" size="sm" class="shrink-0" onclick={() => onSelect(file)}
-										>Select</Button
-									>
-								</div>
-							{/each}
-						</div>
-					{:else}
-						<p class="text-sm text-muted-foreground">No files uploaded yet</p>
-					{/if}
-				</div>
 			</Tabs.Content>
 
 			<!-- Select Tab -->
@@ -239,6 +185,7 @@
 							<button
 								onclick={() => onSelect(file)}
 								class="group relative flex flex-col items-center justify-center rounded-lg border border-border bg-muted/30 p-4 transition-all hover:border-primary hover:bg-muted/60"
+								title={file.name}
 							>
 								<!-- Thumbnail Placeholder -->
 								<div
@@ -250,7 +197,10 @@
 										class="max-h-16 max-w-16 rounded object-contain"
 									/>
 								</div>
-								<p class="line-clamp-2 text-center text-xs font-medium text-foreground">
+								<p
+									class="max-w-full truncate text-center text-xs font-medium text-foreground"
+									title={file.name}
+								>
 									{file.name}
 								</p>
 								<p class="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>

@@ -24,7 +24,7 @@ export const getProductsQuery = ({ filter, page }: { page: number; filter: strin
 export const getMediaQuery = ({ page }: { page: number }) => {
 	const q = createQuery({
 		queryKey: ['media', page],
-		queryFn: () => pb.collection<Media>('media').getList(page, CONFIG.PER_PAGE)
+		queryFn: () => pb.collection<Media>('media').getList(page, 20)
 	});
 	return q;
 };

@@ -46,8 +46,9 @@
 				</div>
 				<div></div>
 			</header>
-
-			{@render children?.()}
+			<div class="container px-3">
+				{@render children?.()}
+			</div>
 		</main>
 	</Sidebar.Provider>
 </QueryClientProvider>

@@ -47,7 +47,9 @@
 			onImageSelect={(media) =>
 				onSelect({
 					altText: media.name,
-					src: media.url
+					src: media.url,
+					// @ts-ignore
+					maxWidth: '100%'
 				})}
 		/>
 	</Dialog.Content>
