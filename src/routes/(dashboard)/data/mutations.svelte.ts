@@ -29,3 +29,26 @@ export const createMediaMutation = ({ onSuccess }: { onSuccess?: (data: Media) =
 
 	return m;
 };
+
+export const createProductMutation = ({ onSuccess }: { onSuccess?: (data: any) => void }) => {
+	const m = createMutation({
+		mutationFn: (formData: FormData) => pb.collection('products').create(formData),
+		onSuccess: (data) => {
+			if (onSuccess) onSuccess(data);
+		}
+	});
+
+	return m;
+};
+
+export const updateProductMutation = ({ onSuccess }: { onSuccess?: (data: any) => void }) => {
+	const m = createMutation({
+		mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
+			pb.collection('products').update(id, formData),
+		onSuccess: (data) => {
+			if (onSuccess) onSuccess(data);
+		}
+	});
+
+	return m;
+};

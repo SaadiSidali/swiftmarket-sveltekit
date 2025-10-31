@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createQuery, createMutation, useQueryClient } from '@tanstack/svelte-query';
-	import { X, Cloud, Upload, File as LucideFile, Search } from '@lucide/svelte';
+	import { X, Cloud, Upload, File as LucideFile, Search, Loader2 } from '@lucide/svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Button } from '$lib/components/ui/button';
@@ -152,7 +152,7 @@
 				{#if $uploadMutation.isPending}
 					<div class="flex items-center gap-2 rounded-lg bg-blue-50 p-3 dark:bg-blue-950">
 						<div class="animate-spin">
-							<Upload class="h-4 w-4 text-blue-600 dark:text-blue-400" />
+							<Loader2 class="h-4 w-4 text-blue-600 dark:text-blue-400" />
 						</div>
 						<p class="text-sm text-blue-600 dark:text-blue-400">Uploading file...</p>
 					</div>
@@ -180,7 +180,9 @@
 				{:else if $filesQuery.isError}
 					<p class="text-sm text-destructive">Failed to load files</p>
 				{:else if filteredFiles.length > 0}
-					<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+					<div
+						class="grid max-h-96 grid-cols-2 gap-4 overflow-y-auto sm:grid-cols-3 md:grid-cols-4"
+					>
 						{#each filteredFiles as file (file.id)}
 							<button
 								onclick={() => onSelect(file)}

@@ -6,40 +6,38 @@
 	import { Plus, X } from '@lucide/svelte';
 	import { cn } from '@/utils';
 
-	const { onImageSelect, gallery, removeImage } = $props();
+	const {
+		onImageSelect,
+		gallery,
+		removeImage
+	}: {
+		onImageSelect: (media: Media) => void;
+		gallery: Media[];
+		removeImage: (index: number) => void;
+	} = $props();
 
 	let showModal = $state(false);
 	let mainApi = $state<CarouselAPI>();
-	let thumbApi = $state<CarouselAPI>();
 	let current = $state(0);
 
 	$effect(() => {
-		if (!mainApi || !thumbApi) return;
+		if (!mainApi) return;
 
 		const onMainSelect = () => {
-			if (!mainApi || !thumbApi) return;
+			if (!mainApi) return;
 			current = mainApi.selectedScrollSnap();
-			thumbApi.scrollTo(current);
-		};
-
-		const onThumbSelect = () => {
-			if (!mainApi || !thumbApi) return;
-			mainApi.scrollTo(thumbApi.selectedScrollSnap());
 		};
 
 		mainApi.on('select', onMainSelect);
-		thumbApi.on('select', onThumbSelect);
 		current = mainApi.selectedScrollSnap();
 
 		return () => {
 			mainApi?.off('select', onMainSelect);
-			thumbApi?.off('select', onThumbSelect);
 		};
 	});
 
 	function onThumbClick(index: number) {
 		mainApi?.scrollTo(index);
-		thumbApi?.scrollTo(index);
 	}
 </script>
 
@@ -58,17 +56,15 @@
 		</div>
 
 		<!-- Main Carousel - Fixed Height -->
-		<div class="h-64 w-full">
+		<div class="h-96 w-full">
 			<Root setApi={(api) => (mainApi = api)} class="h-full w-full">
-				<Content class="h-64">
+				<Content class="h-96">
 					{#each gallery as image, index}
-						<Item class="h-64">
-							<div class="relative h-64 overflow-hidden rounded-lg bg-muted">
-								<img
-									class="h-64 w-64 object-contain"
-									src={image || '/placeholder.svg'}
-									alt="Product image {index + 1}"
-								/>
+						<Item class="h-96">
+							<div
+								class="relative flex h-96 w-full items-center justify-center overflow-hidden rounded-md bg-muted"
+							>
+								<img class="object-contain" src={image.url} alt="Product image {index + 1}" />
 								<button
 									type="button"
 									onclick={() => removeImage(index)}
@@ -91,31 +87,23 @@
 			</Root>
 		</div>
 
-		<!-- Thumbnail Carousel - Only show if multiple images -->
+		<!-- Thumbnail Grid - Only show if multiple images -->
 		{#if gallery.length > 1}
-			<Root setApi={(api) => (thumbApi = api)} class="w-full">
-				<Content class="flex gap-2">
-					{#each gallery as image, index}
-						<Item class="h-28 shrink-0 basis-1/5">
-							<button
-								type="button"
-								onclick={() => onThumbClick(index)}
-								class={cn(
-									'relative aspect-square w-full overflow-hidden rounded-md transition-all',
-									index === current ? 'ring-2 ring-primary' : 'opacity-50 hover:opacity-75'
-								)}
-								aria-label="View image {index + 1}"
-							>
-								<img
-									class="h-full w-full object-cover"
-									src={image || '/placeholder.svg'}
-									alt="Thumbnail {index + 1}"
-								/>
-							</button>
-						</Item>
-					{/each}
-				</Content>
-			</Root>
+			<div class="flex flex-wrap gap-2">
+				{#each gallery as image, index}
+					<button
+						type="button"
+						onclick={() => onThumbClick(index)}
+						class={cn(
+							'relative size-20 overflow-hidden rounded-md transition-all',
+							index === current ? 'ring-2 ring-primary' : 'opacity-50 hover:opacity-75'
+						)}
+						aria-label="View image {index + 1}"
+					>
+						<img class="h-full w-full object-cover" src={image.url} alt="Thumbnail {index + 1}" />
+					</button>
+				{/each}
+			</div>
 		{/if}
 	</div>
 {:else}

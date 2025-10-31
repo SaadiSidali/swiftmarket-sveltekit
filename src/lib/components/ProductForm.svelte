@@ -26,12 +26,12 @@
 		related_products?: string[];
 		categories?: string[];
 		image?: string;
-		gallery?: string[];
+		gallery?: Media[];
 	}
 
 	interface Props {
 		initialData?: Product;
-		onSubmit: (data: Product) => void;
+		onSubmit: (data: any) => void;
 		isLoading?: boolean;
 	}
 
@@ -55,8 +55,7 @@
 	});
 
 	function handleSubmit(e: Event) {
-		e.preventDefault();
-		onSubmit(formData);
+		onSubmit({ ...formData, gallery: formData.gallery?.map((media) => media.id) });
 	}
 
 	function generateSlug(name: string) {
@@ -80,7 +79,7 @@
 		if (!formData.gallery) {
 			formData.gallery = [];
 		}
-		formData.gallery = [...formData.gallery, media.url];
+		formData.gallery = [...formData.gallery, media];
 	}
 
 	function removeImage(index: number) {
@@ -94,7 +93,7 @@
 	<div class="space-y-8">
 		<div class="space-y-4">
 			<h2 class="text-xl font-semibold text-foreground">Gallery</h2>
-			<ProductFormAddImage {onImageSelect} {removeImage} gallery={formData.gallery} />
+			<ProductFormAddImage {onImageSelect} {removeImage} gallery={formData.gallery ?? []} />
 
 			<h2 class="text-xl font-semibold text-foreground">Basic Information</h2>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -163,13 +162,12 @@
 					/>
 				</div>
 				<div class="space-y-2">
-					<Label for="sku">SKU *</Label>
+					<Label for="sku">SKU</Label>
 					<Input
 						id="sku"
 						type="text"
 						placeholder="SKU-001"
 						bind:value={formData.sku}
-						required
 						class="w-full"
 					/>
 				</div>
@@ -191,7 +189,7 @@
 
 			<div class="space-y-2">
 				<Label for="details">Details</Label>
-				<Editor />
+				<Editor bind:value={formData.details} />
 			</div>
 		</div>
 

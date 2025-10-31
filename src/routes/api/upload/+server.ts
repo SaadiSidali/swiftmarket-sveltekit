@@ -50,8 +50,8 @@ interface ProcessedImages {
 
 async function processImage(imageBuffer: Buffer): Promise<ProcessedImages> {
 	const metadata = await sharp(imageBuffer).metadata();
-	const maxWidth = 1920;
-	const maxHeight = 1920;
+	const maxWidth = 1080;
+	const maxHeight = 1080;
 
 	let resizeOptions = {};
 	if (metadata.width && metadata.height) {

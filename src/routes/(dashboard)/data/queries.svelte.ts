@@ -21,6 +21,26 @@ export const getProductsQuery = ({ filter, page }: { page: number; filter: strin
 	return q;
 };
 
+export const getProductQuery = (id: string) => {
+	const q = createQuery({
+		queryKey: ['product', id],
+		queryFn: () =>
+			pb
+				.collection<
+					Product & {
+						expand: {
+							gallery: Media[];
+							categories: any[];
+						};
+					}
+				>('products')
+				.getOne(id, {
+					expand: 'gallery,categories'
+				})
+	});
+	return q;
+};
+
 export const getMediaQuery = ({ page }: { page: number }) => {
 	const q = createQuery({
 		queryKey: ['media', page],

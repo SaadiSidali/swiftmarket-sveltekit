@@ -1,6 +1,12 @@
-import { $getRoot } from 'svelte-lexical';
+import { $getRoot, getEditor, generateNodesFromDOM } from 'svelte-lexical';
 
-export function prepopulatedRichText() {
+export function prepopulatedRichText(html?: string) {
 	const root = $getRoot();
-	root.clear();
+	if (html) {
+		const parser = new DOMParser();
+		const dom = parser.parseFromString(html, 'text/html');
+		const nodes = generateNodesFromDOM(getEditor(), dom);
+		root.append(...nodes);
+		return;
+	}
 }
