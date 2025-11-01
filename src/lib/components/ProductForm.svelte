@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte';
 
 	interface Props {
-		initialData?: Product;
+		initialData?: Partial<Product>;
 		onSubmit: (data: any) => void;
 		isLoading?: boolean;
 	}
@@ -41,7 +41,7 @@
 		};
 	});
 
-	let formData = $state<Product>({
+	let formData = $state<Partial<Product>>({
 		name: initialData?.name || '',
 		description: initialData?.description || '',
 		slug: initialData?.slug || '',
@@ -53,7 +53,6 @@
 		is_active: initialData?.is_active ?? true,
 		related_products: initialData?.related_products || [],
 		categories: initialData?.categories || [],
-		image: initialData?.image || '',
 		gallery: initialData?.gallery || [],
 		...(initialData?.id && { id: initialData.id })
 	});
@@ -351,7 +350,6 @@
 						is_active: true,
 						related_products: [],
 						categories: [],
-						image: '',
 						gallery: []
 					};
 				}}

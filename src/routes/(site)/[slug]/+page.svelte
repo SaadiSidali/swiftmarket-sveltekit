@@ -47,14 +47,7 @@
 
 			<div class="grid grid-cols-2 gap-12 py-5 pr-5">
 				{#each product.expand.related_products as relatedProduct (relatedProduct.id)}
-					<ProductItem
-						title={relatedProduct.name}
-						image={relatedProduct.expand.image.url}
-						hoverImage={relatedProduct.expand.image.url}
-						price={relatedProduct.price}
-						salePrice={relatedProduct.sale_price}
-						link="/{relatedProduct.slug}"
-					/>
+					<ProductItem product={relatedProduct} />
 				{/each}
 			</div>
 		</div>

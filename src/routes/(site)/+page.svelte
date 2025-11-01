@@ -10,6 +10,7 @@
 	let { data }: Props = $props();
 	let showcase = data.showcase;
 	let banners = data.carousels;
+	console.log('Data:', JSON.stringify(data, null, 2));
 </script>
 
 <svelte:head>
@@ -44,17 +45,7 @@
 
 		<div class="grid grid-cols-2 gap-12 lg:grid-cols-4">
 			{#each showsection.expand.products as product (product.id)}
-				<ProductItem
-					title={product.name}
-					image="{POCKETBASEURL}/api/files/{product.collectionName}/{product.id}/{product
-						.gallery[0]}"
-					hoverImage={product.gallery.length > 1
-						? `${POCKETBASEURL}/api/files/${product.collectionName}/${product.id}/${product.gallery[1]}`
-						: ''}
-					price={product.price}
-					salePrice={product.sale_price}
-					link="/{product.slug}"
-				/>
+				<ProductItem {product} />
 			{/each}
 		</div>
 	{/each}

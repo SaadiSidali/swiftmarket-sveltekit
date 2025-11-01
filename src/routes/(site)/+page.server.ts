@@ -6,7 +6,7 @@ export const load = (async ({ locals }) => {
 	try {
 		const [showcaseRecords, carouselsRecords] = await Promise.all([
 			locals.pb.collection('showcase').getFullList({
-				expand: 'products',
+				expand: 'products,products.gallery',
 				sort: 'created'
 			}),
 			locals.pb.collection('carousels').getFullList({

@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import ProductForm from '@/components/ProductForm.svelte';
 	import { updateProductMutation } from '../../../data/mutations.svelte';
+	import { toast } from 'svelte-sonner';
 
 	const productId = $derived(page.params.id);
 	const productQuery = getProductQuery(productId!);
@@ -10,11 +11,13 @@
 	const mutation = updateProductMutation({
 		onSuccess(product) {
 			console.log('Product updated:', product);
+			toast.success('Product updated successfully');
 		}
 	});
 
 	function handleSubmit(formData: any) {
 		$mutation.mutate({ id: productId!, formData });
+		toast.loading('Updating product...');
 	}
 </script>
 

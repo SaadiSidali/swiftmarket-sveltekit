@@ -22,13 +22,13 @@
 			width="700"
 			height="700"
 			loading="lazy"
-			src={hovered && product.expand.gallery.length > 1
+			src={hovered && product.expand.gallery?.length > 1
 				? product.expand.gallery[1].url
-				: product.image}
+				: product.expand.gallery[0]?.url}
 			alt="{product.name} image"
 		/>
 	</a>
-	<div class="flex flex-grow flex-col justify-start gap-1 text-center leading-tight">
+	<div class="flex grow flex-col justify-start gap-1 text-center leading-tight">
 		<a href={product.slug}>{product.name}</a>
 		<div class="flex justify-center gap-3">
 			{#if product.sale_price === 0}

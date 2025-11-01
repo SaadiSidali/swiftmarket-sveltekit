@@ -8,16 +8,16 @@ export const load = (async ({ params, locals }) => {
 			.collection<
 				Product & {
 					expand: {
-						related_products: (Product & { expand: { image: Media } })[];
+						related_products: (Product & { expand: { gallery: Media[] } })[];
 						gallery: Media[];
 						image: Media;
 					};
 				}
 			>('products')
 			.getFirstListItem(`slug="${params.slug}"`, {
-				expand: 'related_products,gallery,image,related_products.image'
+				expand: 'related_products,gallery,image,related_products.gallery'
 			});
-		console.log('Product:', productRecord);
+		console.log('Product:', JSON.stringify(productRecord, null, 2));
 
 		logger.info(`Loading product with slug: ${params.slug}`);
 
