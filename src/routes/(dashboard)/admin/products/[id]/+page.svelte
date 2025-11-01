@@ -4,14 +4,23 @@
 	import ProductForm from '@/components/ProductForm.svelte';
 	import { updateProductMutation } from '../../../data/mutations.svelte';
 	import { toast } from 'svelte-sonner';
+	import { QueryClient } from '@tanstack/svelte-query';
 
 	const productId = $derived(page.params.id);
-	const productQuery = getProductQuery(productId!);
+	const productQuery = $derived(getProductQuery(productId!));
+
+	const queryClient = new QueryClient();
 
 	const mutation = updateProductMutation({
-		onSuccess(product) {
+		async onSuccess(product) {
 			console.log('Product updated:', product);
 			toast.success('Product updated successfully');
+			await queryClient.refetchQueries({
+				queryKey: ['products']
+			});
+			await queryClient.refetchQueries({
+				queryKey: ['product', productId]
+			});
 		}
 	});
 

@@ -57,6 +57,26 @@
 		...(initialData?.id && { id: initialData.id })
 	});
 
+	$effect(() => {
+		if (initialData) {
+			formData = {
+				name: initialData?.name || '',
+				description: initialData?.description || '',
+				slug: initialData?.slug || '',
+				price: initialData?.price || 0,
+				sale_price: initialData?.sale_price || undefined,
+				in_stock: initialData?.in_stock ?? true,
+				sku: initialData?.sku || '',
+				details: initialData?.details || '',
+				is_active: initialData?.is_active ?? true,
+				related_products: initialData?.related_products || [],
+				categories: initialData?.categories || [],
+				gallery: initialData?.gallery || [],
+				...(initialData?.id && { id: initialData.id })
+			};
+		}
+	});
+
 	function handleSubmit(e: Event) {
 		onSubmit({ ...formData, gallery: formData.gallery?.map((media) => media.id) });
 	}
