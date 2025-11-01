@@ -24,7 +24,7 @@
 	<p class="text-red-600">Failed to load product.</p>
 {:else}
 	<ProductForm
-		initialData={{ ...$productQuery.data, gallery: $productQuery.data?.expand.gallery }}
+		initialData={{ ...$productQuery.data, gallery: $productQuery.data?.expand?.gallery ?? [] }}
 		onSubmit={handleSubmit}
 	/>
 {/if}

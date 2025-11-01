@@ -21,7 +21,11 @@
 			url: '/admin/products',
 			icon: PackageIcon
 		},
-
+		{
+			title: 'Categories',
+			url: '/admin/categories',
+			icon: CalendarIcon
+		},
 		{
 			title: 'Settings',
 			url: '/admin/settings',

@@ -12,23 +12,6 @@
 	import { cn } from '$lib/utils';
 	import ProductFormAddImage from './ProductFormAddImage.svelte';
 
-	interface Product {
-		id?: string;
-		name: string;
-		description: string;
-		slug: string;
-		price: number;
-		sale_price?: number;
-		in_stock: boolean;
-		sku: string;
-		details: string;
-		is_active: boolean;
-		related_products?: string[];
-		categories?: string[];
-		image?: string;
-		gallery?: Media[];
-	}
-
 	interface Props {
 		initialData?: Product;
 		onSubmit: (data: any) => void;

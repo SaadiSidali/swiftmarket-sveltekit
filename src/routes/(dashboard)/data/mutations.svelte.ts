@@ -52,3 +52,26 @@ export const updateProductMutation = ({ onSuccess }: { onSuccess?: (data: any) =
 
 	return m;
 };
+
+export const createCategoryMutation = ({ onSuccess }: { onSuccess?: (data: any) => void }) => {
+	const m = createMutation({
+		mutationFn: (formData: FormData) => pb.collection('categories').create(formData),
+		onSuccess: (data) => {
+			if (onSuccess) onSuccess(data);
+		}
+	});
+
+	return m;
+};
+
+export const updateCategoryMutation = ({ onSuccess }: { onSuccess?: (data: any) => void }) => {
+	const m = createMutation({
+		mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
+			pb.collection('categories').update(id, formData),
+		onSuccess: (data) => {
+			if (onSuccess) onSuccess(data);
+		}
+	});
+
+	return m;
+};

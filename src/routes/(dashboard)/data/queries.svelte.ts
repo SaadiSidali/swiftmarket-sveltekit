@@ -48,3 +48,38 @@ export const getMediaQuery = ({ page }: { page: number }) => {
 	});
 	return q;
 };
+
+export const getCategoriesQuery = ({ filter, page }: { page: number; filter: string }) => {
+	const q = createQuery({
+		queryKey: ['categories', page, filter],
+		queryFn: () =>
+			pb.collection<Category>('categories').getList(page, CONFIG.PER_PAGE, {
+				filter,
+				expand: 'parent'
+			})
+	});
+	return q;
+};
+
+export const getCategoryQuery = (id: string) => {
+	const q = createQuery({
+		queryKey: ['category', id],
+		queryFn: () =>
+			pb.collection<Category>('categories').getOne(id, {
+				expand: 'parent'
+			})
+	});
+	return q;
+};
+
+export const getAllCategoriesQuery = () => {
+	const q = createQuery({
+		queryKey: ['categories', 'all'],
+		queryFn: () =>
+			pb.collection<Category>('categories').getFullList({
+				sort: 'name',
+				expand: 'parent'
+			})
+	});
+	return q;
+};
