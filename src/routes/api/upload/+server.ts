@@ -5,6 +5,7 @@ import { env } from '$env/dynamic/private';
 import { env as penv } from '$env/dynamic/public';
 import PocketBase from 'pocketbase';
 import { slugify } from '../../(dashboard)/utils';
+import logger from '@/logger';
 
 const s3 = new S3Client({
 	region: 'auto',
@@ -19,7 +20,6 @@ const BUCKET_NAME = env.S3_BUCKET!;
 
 // Authentication helpers
 async function verifyJWT(jwt: string): Promise<boolean> {
-	console.log(env);
 	try {
 		const response = await fetch(
 			`${penv.PUBLIC_POCKETBASE_URL}/api/collections/users/auth-refresh`,
@@ -33,7 +33,7 @@ async function verifyJWT(jwt: string): Promise<boolean> {
 
 		return response.ok;
 	} catch (error) {
-		console.log('JWT verification error:', error);
+		logger.error('JWT verification error:');
 		return false;
 	}
 }

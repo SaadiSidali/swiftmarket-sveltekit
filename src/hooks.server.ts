@@ -44,8 +44,6 @@ const authHandle: Handle = async ({ event, resolve }) => {
 };
 
 const protectHandle: Handle = async ({ event, resolve }) => {
-	console.log('Protect Handle:', event.url.pathname);
-	console.log('User:', event.locals.user);
 	if (event.url.pathname.startsWith('/admin') && !event.locals.user) {
 		redirect(302, '/login');
 	}

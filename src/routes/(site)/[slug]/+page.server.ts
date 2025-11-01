@@ -17,7 +17,6 @@ export const load = (async ({ params, locals }) => {
 			.getFirstListItem(`slug="${params.slug}"`, {
 				expand: 'related_products,gallery,image,related_products.gallery'
 			});
-		console.log('Product:', JSON.stringify(productRecord, null, 2));
 
 		logger.info(`Loading product with slug: ${params.slug}`);
 
