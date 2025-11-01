@@ -12,6 +12,8 @@ export const POCKETBASEURL = env.PUBLIC_POCKETBASE_URL;
 
 export const WEBSITE_NAME = 'Sidali Store';
 
+export const WEBSITE_URL = 'https://ss.storesdz.com';
+
 export function formatCurrency(amount: number | undefined | null) {
 	if (!amount) {
 		return '';

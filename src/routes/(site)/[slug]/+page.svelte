@@ -4,7 +4,7 @@
 	import QuantityInput from '$lib/components/QuantityInput.svelte';
 	import ProductDetails from '$lib/components/ProductDetails.svelte';
 	import ProductItem from '$lib/components/ProductItem.svelte';
-	import { formatCurrency, POCKETBASEURL, WEBSITE_NAME } from '$lib/utils';
+	import { formatCurrency, POCKETBASEURL, WEBSITE_NAME, WEBSITE_URL } from '$lib/utils';
 	import OrderForm from '@/components/OrderForm.svelte';
 	import ProductInfo from '@/components/ProductInfo.svelte';
 
@@ -28,6 +28,8 @@
 	<meta name="twitter:title" content="{product.name} | {WEBSITE_NAME}" />
 	<meta name="twitter:description" content={product.description} />
 	<meta name="twitter:image" content={product.expand.gallery[0].url} />
+
+	<link rel="canonical" href="{WEBSITE_URL}/{product.slug}" />
 </svelte:head>
 
 <div
