@@ -19,6 +19,15 @@
 
 <svelte:head>
 	<title>{product.name} | {WEBSITE_NAME}</title>
+	<meta name="description" content={product.description} />
+
+	<meta property="og:title" content="{product.name} | {WEBSITE_NAME}" />
+	<meta property="og:description" content={product.description} />
+	<meta property="og:image" content={product.expand.gallery[0].url} />
+
+	<meta name="twitter:title" content="{product.name} | {WEBSITE_NAME}" />
+	<meta name="twitter:description" content={product.description} />
+	<meta name="twitter:image" content={product.expand.gallery[0].url} />
 </svelte:head>
 
 <div
