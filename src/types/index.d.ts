@@ -50,3 +50,36 @@ interface Category {
 		parent?: Category;
 	};
 }
+
+interface ConfigRecord {
+	id: string;
+	collectionId: string;
+	collectionName: string;
+	created: string; // ISO timestamp
+	updated: string; // ISO timestamp
+	key: string;
+	value: string;
+}
+
+interface StoreSettings {
+	use_captcha: boolean;
+	captcha_site_key: string;
+	captcha_secret_key: string;
+	facebook_pixel: string;
+	google_analytics: string;
+	tiktok_pixel: string;
+	facebook_url: string;
+	instagram_url: string;
+	location: string;
+	email: string;
+	phone1: string;
+	phone2: string;
+	address: string;
+}
+
+interface RecaptchaResponse {
+	success: boolean;
+	challenge_ts: string; // timestamp of the challenge load (ISO format yyyy-MM-dd'T'HH:mm:ssZZ)
+	hostname: string; // the hostname of the site where the reCAPTCHA was solved
+	'error-codes': string[]; // optional
+}

@@ -34,6 +34,7 @@ async function verifyJWT(jwt: string): Promise<boolean> {
 		return response.ok;
 	} catch (error) {
 		logger.error('JWT verification error:');
+		logger.error(error);
 		return false;
 	}
 }

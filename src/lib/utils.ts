@@ -85,6 +85,52 @@ export function getProductImageUrl({
 		});
 	}
 }
+
+/**
+ * Normalize an array of PocketBase-style records into a key -> value map.
+ *
+ * Example input:
+ * [
+ *   { id: "93047kjldfs", key: "facebook_pixel_id", value: "test", ... },
+ *   { id: "sdfkjbsf3487i2", key: "google_analytics_id", value: "test2", ... }
+ * ]
+ *
+ * Result:
+ * { facebook_pixel_id: "test", google_analytics_id: "test2" }
+ */
+export function normalizeRecords<T extends { key: string; value: string }>(
+	records: T[]
+): StoreSettings & Record<string, string> {
+	return records.reduce(
+		(acc, record) => {
+			acc[record.key] = record.value;
+			return acc;
+		},
+		{} as StoreSettings & Record<string, string>
+	);
+}
+
+export function getUserIp(request: Request): string | undefined {
+	// Cloudflare-specific headers
+	const cfConnectingIp = request.headers.get('cf-connecting-ip');
+	if (cfConnectingIp) {
+		return cfConnectingIp;
+	}
+
+	// Fallback to other common headers
+	const xForwardedFor = request.headers.get('x-forwarded-for');
+	if (xForwardedFor) {
+		return xForwardedFor.split(',')[0].trim();
+	}
+
+	const xRealIp = request.headers.get('x-real-ip');
+	if (xRealIp) {
+		return xRealIp;
+	}
+
+	return undefined;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
