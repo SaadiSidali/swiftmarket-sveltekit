@@ -110,6 +110,20 @@ export function normalizeRecords<T extends { key: string; value: string }>(
 	);
 }
 
+export function normalizeRecordsForClient<T extends { key: string; value: string }>(
+	records: T[]
+): StoreSettings & Record<string, string> {
+	return records.reduce(
+		(acc, record) => {
+			if (!record.key.toLowerCase().includes('secret')) {
+				acc[record.key] = record.value;
+			}
+			return acc;
+		},
+		{} as StoreSettings & Record<string, string>
+	);
+}
+
 export function getUserIp(request: Request): string | undefined {
 	// Cloudflare-specific headers
 	const cfConnectingIp = request.headers.get('cf-connecting-ip');

@@ -42,7 +42,7 @@
 		<ProductInfo {product} />
 
 		<div class="flex flex-col gap-2">
-			<OrderForm />
+			<OrderForm {data} />
 		</div>
 	</div>
 </div>

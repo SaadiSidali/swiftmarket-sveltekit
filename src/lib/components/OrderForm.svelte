@@ -1,5 +1,23 @@
 <script lang="ts">
 	import { WILAYAS, CITIES } from '@/wilayasAndCities';
+	import { onMount } from 'svelte';
+
+	const { data } = $props();
+
+	onMount(() => {
+		// load captcha script if needed
+		if (data.config.use_captcha) {
+			// find if script already exists
+			const existingScript = document.querySelector(
+				`script[src="https://www.google.com/recaptcha/api.js?render=${data.config.captcha_site_key}"]`
+			);
+			if (!existingScript) {
+				const script = document.createElement('script');
+				script.src = `https://www.google.com/recaptcha/api.js?render=${data.config.captcha_site_key}`;
+				document.head.appendChild(script);
+			}
+		}
+	});
 
 	let selectedWilaya: string = $state('');
 	let selectedCity: string = $state('');

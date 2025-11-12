@@ -10,7 +10,6 @@
 	let { data }: Props = $props();
 	let showcase = data.showcase;
 	let banners = data.carousels;
-	console.log('Data:', JSON.stringify(data, null, 2));
 </script>
 
 <svelte:head>
