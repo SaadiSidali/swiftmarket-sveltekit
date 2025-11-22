@@ -9,11 +9,11 @@
 	import ProductInfo from '@/components/ProductInfo.svelte';
 
 	let { data } = $props();
-	let product = $state(data);
+	let product = $state(data.product);
 	let quantity = $state(1);
 
 	$effect(() => {
-		product = data;
+		product = data.product;
 	});
 </script>
 

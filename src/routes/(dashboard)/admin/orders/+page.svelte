@@ -100,8 +100,6 @@
 	});
 </script>
 
-<pre>{JSON.stringify($ordersQuery, null, 2)}</pre>
-
 <div class="container mx-auto space-y-6">
 	<!-- Page header -->
 	<div class="flex items-center justify-between">

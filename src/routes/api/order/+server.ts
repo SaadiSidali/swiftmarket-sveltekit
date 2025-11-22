@@ -15,16 +15,21 @@ async function verifyRecaptcha({
 	remoteip?: string;
 }): Promise<RecaptchaResponse> {
 	const url = 'https://www.google.com/recaptcha/api/siteverify';
+	const params = new URLSearchParams({
+		secret,
+		response: token
+	});
+	
+	if (remoteip) {
+		params.append('remoteip', remoteip);
+	}
+	
 	const response = await fetch(url, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/x-www-form-urlencoded'
 		},
-		body: JSON.stringify({
-			secret,
-			response: token,
-			...(remoteip ? { remoteip } : {})
-		})
+		body: params.toString()
 	});
 	const data = await response.json();
 	return data;
@@ -82,19 +87,32 @@ export async function POST({ request }: RequestEvent) {
 
 	const products = body.products as { id: string; quantity: number }[];
 
+	// Fetch product details to calculate total
+	const productDetails = await Promise.all(
+		products.map((p) => pb.collection('products').getOne(p.id))
+	);
+
+	const totalAmount = products.reduce((sum, p, index) => {
+		const productPrice = productDetails[index].price || 0;
+		return sum + productPrice * p.quantity;
+	}, 0);
+
 	const orderData: any = {
 		products: products.map((p) => ({
 			product: p.id,
 			quantity: p.quantity
 		})),
-		total_amount: body.total_amount,
-		customer_name: body.customer_name,
-		customer_email: body.customer_email,
-		customer_address: body.customer_address,
-		customer_phone: body.customer_phone,
+		total_amount: totalAmount,
+		customer_name: body.fullName,
+		customer_email: body.email || '',
+		customer_phone: body.phone,
+		customer_address: body.address || '',
+		wilaya: body.wilaya,
+		city: body.city,
 		status: 'pending'
 	};
+	
 	const orderRecord = await pb.collection('orders').create(orderData);
 
-	return json({ config: config });
+	return json({ success: true, orderId: orderRecord.id });
 }

@@ -20,7 +20,7 @@ export const load = (async ({ params, locals }) => {
 
 		logger.info(`Loading product with slug: ${params.slug}`);
 
-		return productRecord;
+		return {product: productRecord};
 	} catch (e) {
 		logger.info(`Couldnt load page /shop/${params.slug}`);
 		error(404, {
