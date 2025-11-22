@@ -1,5 +1,5 @@
 # Build stage
-FROM node:24.1-alpine3.20 AS builder
+FROM node:24-alpine3.22 AS builder
 
 # Install pnpm
 RUN npm install -g pnpm
@@ -15,10 +15,12 @@ COPY src ./src
 COPY static ./static
 COPY svelte.config.* ./
 COPY vite.config.* ./
+COPY messages ./messages
+COPY project.inlang ./project.inlang
 
 RUN pnpm build
 
-FROM node:24.1-alpine3.20 AS runner
+FROM node:24-alpine3.22 AS runner
 
 WORKDIR /app
 
